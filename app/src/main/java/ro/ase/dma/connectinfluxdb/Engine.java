@@ -7,93 +7,180 @@ import java.util.Objects;
 
 public class Engine implements Parcelable {
 
-    private int id;
-    private String name;
-    private Boolean isActive;
-    private Double temperature; //T0 T1 T2
-    private Double power; // P_testem3_0 P_testem3_1 P_testem3_2
-    private Double powerFactor; // PF_0 PF_1 PF_2
-    private Double tension; // V_0 V_1 V_2
-    private Double amperage; // I_0 I_1 I_2
+    String temperatureTime;     //T
+    String temperatureValue ;    //T
+    String powerTime;           //P
+    String powerValue;          //P
+    String powerFactorTime;     //PF
+    String powerFactorValue;    //PF
+    String tensionTime;        //V
+    String tensionValue;       //V
+    String amperageTime;       //I
+    String amperageValue;      //I
 
-    public Engine(int id, String name, Boolean isActive, Double temperature, Double power, Double powerFactor, Double tension, Double amperage) {
-        this.id = id;
-        this.name = name;
-        this.isActive = isActive;
-        this.temperature = temperature;
-        this.power = power;
-        this.powerFactor = powerFactor;
-        this.tension = tension;
-        this.amperage = amperage;
+    public Engine(String temperatureTime, String temperatureValue, String powerTime, String powerValue, String powerFactorTime, String powerFactorValue, String tensionTime, String tensionValue, String amperageTime, String amperageValue) {
+        this.temperatureTime = temperatureTime;
+        this.temperatureValue = temperatureValue;
+        this.powerTime = powerTime;
+        this.powerValue = powerValue;
+        this.powerFactorTime = powerFactorTime;
+        this.powerFactorValue = powerFactorValue;
+        this.tensionTime = tensionTime;
+        this.tensionValue = tensionValue;
+        this.amperageTime = amperageTime;
+        this.amperageValue = amperageValue;
+    }
+
+    //copy construcotr
+    public Engine(Engine other) {
+        this.temperatureTime = other.temperatureTime;
+        this.temperatureValue = other.temperatureValue;
+        this.powerTime = other.powerTime;
+        this.powerValue = other.powerValue;
+        this.powerFactorTime = other.powerFactorTime;
+        this.powerFactorValue = other.powerFactorValue;
+        this.tensionTime = other.tensionTime;
+        this.tensionValue = other.tensionValue;
+        this.amperageTime = other.amperageTime;
+        this.amperageValue = other.amperageValue;
+    }
+
+    @Override
+    public String toString() {
+        return "Engine{" +
+                "temperatureTime='" + temperatureTime + '\'' +
+                ", temperatureValue='" + temperatureValue + '\'' +
+                ", powerTime='" + powerTime + '\'' +
+                ", powerValue='" + powerValue + '\'' +
+                ", powerFactorTime='" + powerFactorTime + '\'' +
+                ", powerFactorValue='" + powerFactorValue + '\'' +
+                ", tensionTime='" + tensionTime + '\'' +
+                ", tensionValue='" + tensionValue + '\'' +
+                ", amperageTime='" + amperageTime + '\'' +
+                ", amperageValue='" + amperageValue + '\'' +
+                '}';
+    }
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Engine engine = (Engine) o;
+        return Objects.equals(temperatureTime, engine.temperatureTime) && Objects.equals(temperatureValue, engine.temperatureValue) && Objects.equals(powerTime, engine.powerTime) && Objects.equals(powerValue, engine.powerValue) && Objects.equals(powerFactorTime, engine.powerFactorTime) && Objects.equals(powerFactorValue, engine.powerFactorValue) && Objects.equals(tensionTime, engine.tensionTime) && Objects.equals(tensionValue, engine.tensionValue) && Objects.equals(amperageTime, engine.amperageTime) && Objects.equals(amperageValue, engine.amperageValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(temperatureTime, temperatureValue, powerTime, powerValue, powerFactorTime, powerFactorValue, tensionTime, tensionValue, amperageTime, amperageValue);
+    }
+
+    public String getTemperatureTime() {
+        return temperatureTime;
+    }
+
+    public void setTemperatureTime(String temperatureTime) {
+        this.temperatureTime = temperatureTime;
+    }
+
+    public String getTemperatureValue() {
+        return temperatureValue;
+    }
+
+    public void setTemperatureValue(String temperatureValue) {
+        this.temperatureValue = temperatureValue;
+    }
+
+    public String getPowerTime() {
+        return powerTime;
+    }
+
+    public void setPowerTime(String powerTime) {
+        this.powerTime = powerTime;
+    }
+
+    public String getPowerValue() {
+        return powerValue;
+    }
+
+    public void setPowerValue(String powerValue) {
+        this.powerValue = powerValue;
+    }
+
+    public String getPowerFactorTime() {
+        return powerFactorTime;
+    }
+
+    public void setPowerFactorTime(String powerFactorTime) {
+        this.powerFactorTime = powerFactorTime;
+    }
+
+    public String getPowerFactorValue() {
+        return powerFactorValue;
+    }
+
+    public void setPowerFactorValue(String powerFactorValue) {
+        this.powerFactorValue = powerFactorValue;
+    }
+
+    public String getTensionTime() {
+        return tensionTime;
+    }
+
+    public void setTensionTime(String tensionTime) {
+        this.tensionTime = tensionTime;
+    }
+
+    public String getTensionValue() {
+        return tensionValue;
+    }
+
+    public void setTensionValue(String tensionValue) {
+        this.tensionValue = tensionValue;
+    }
+
+    public String getAmperageTime() {
+        return amperageTime;
+    }
+
+    public void setAmperageTime(String amperageTime) {
+        this.amperageTime = amperageTime;
+    }
+
+    public String getAmperageValue() {
+        return amperageValue;
+    }
+
+    public void setAmperageValue(String amperageValue) {
+        this.amperageValue = amperageValue;
     }
 
     protected Engine(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        byte tmpIsActive = in.readByte();
-        isActive = tmpIsActive == 0 ? null : tmpIsActive == 1;
-        if (in.readByte() == 0) {
-            temperature = null;
-        } else {
-            temperature = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            power = null;
-        } else {
-            power = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            powerFactor = null;
-        } else {
-            powerFactor = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            tension = null;
-        } else {
-            tension = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            amperage = null;
-        } else {
-            amperage = in.readDouble();
-        }
+        temperatureTime = in.readString();
+        temperatureValue = in.readString();
+        powerTime = in.readString();
+        powerValue = in.readString();
+        powerFactorTime = in.readString();
+        powerFactorValue = in.readString();
+        tensionTime = in.readString();
+        tensionValue = in.readString();
+        amperageTime = in.readString();
+        amperageValue = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeByte((byte) (isActive == null ? 0 : isActive ? 1 : 2));
-        if (temperature == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(temperature);
-        }
-        if (power == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(power);
-        }
-        if (powerFactor == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(powerFactor);
-        }
-        if (tension == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(tension);
-        }
-        if (amperage == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(amperage);
-        }
+        dest.writeString(temperatureTime);
+        dest.writeString(temperatureValue);
+        dest.writeString(powerTime);
+        dest.writeString(powerValue);
+        dest.writeString(powerFactorTime);
+        dest.writeString(powerFactorValue);
+        dest.writeString(tensionTime);
+        dest.writeString(tensionValue);
+        dest.writeString(amperageTime);
+        dest.writeString(amperageValue);
     }
 
     @Override
@@ -112,31 +199,4 @@ public class Engine implements Parcelable {
             return new Engine[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "Engine{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", isActive=" + isActive +
-                ", temperature=" + temperature +
-                ", power=" + power +
-                ", powerFactor=" + powerFactor +
-                ", tension=" + tension +
-                ", amperage=" + amperage +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Engine engine = (Engine) o;
-        return id == engine.id && Objects.equals(name, engine.name) && Objects.equals(isActive, engine.isActive) && Objects.equals(temperature, engine.temperature) && Objects.equals(power, engine.power) && Objects.equals(powerFactor, engine.powerFactor) && Objects.equals(tension, engine.tension) && Objects.equals(amperage, engine.amperage);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, isActive, temperature, power, powerFactor, tension, amperage);
-    }
 }

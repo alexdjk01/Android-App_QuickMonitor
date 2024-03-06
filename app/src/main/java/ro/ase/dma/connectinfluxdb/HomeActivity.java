@@ -35,7 +35,6 @@ import java.util.Arrays;
 // DECI IN FUNCTIE DE DATELE PRIMITE DE LA INFLUX DB NE PUTEM DA SEAMA CATE MOTOARE TRANSMIT INFORMATII
 // O SA CREEZ ATATEA OBIECTE DE TIP MOTOR CATE SUNT TRANSMISE SI VOI POPULA UN RECYCLER VIEW SAU CEVA DE GENU CU ACESTE MOTOARE SI VOI PERMITE SA LE
 // ATINGI IN HOME ACTIVITY CA SA INTRII IN DASHBOARDUL FIECARUI MOTOR!
-//commit
 
 public class HomeActivity extends AppCompatActivity implements DataUpdateCallback {
     private BottomNavigationView bottomNavigation;
@@ -45,8 +44,9 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     ArrayList<ArrayList<String>> groupedEngines = new ArrayList<>();
     ArrayList<ArrayList<String>> resultHistory = new ArrayList<>();
 
-    private ArrayList<String> timeLabelsTemperature = new ArrayList<>();
-    private ArrayList<Double> seriesValuesTemperature = new ArrayList<>();
+    Engine engineOne;
+    Engine engineTwo;
+    Engine engineThree;
 
     private Button btnEngine1;
     private Button btnEngine2;
@@ -339,7 +339,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 }
             }
             // now the engines are grouped in the groupedEngine arrayList that will contain 3 engines
-            // we need to work with the data inside this ArrayList
+            // we need to work with the data inside this ArrayList.
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -347,89 +348,118 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 }
             });
 
-
-
         }
 
     }
 
+
+    public void loadDataSeparatelyAndSaveItInResultHistoryEvenWhenNotInFocus(){
+        resultHistory.get(0).add(String.format("T%d, %s, %s",0,engineOne.getTemperatureTime(),engineOne.getTemperatureValue()));
+        resultHistory.get(1).add(String.format("T%d, %s, %s",1,engineTwo.getTemperatureTime(),engineTwo.getTemperatureValue()));
+        resultHistory.get(2).add(String.format("T%d, %s, %s",2,engineThree.getTemperatureTime(),engineThree.getTemperatureValue()));
+    }
+
     // func for update UI elements that will be called from dataChanged
+
     public void updateUI(ArrayList<ArrayList<String>> groupedEngines)
     {
+        fetchLiveDataForEachEngine(groupedEngines);
+        loadDataSeparatelyAndSaveItInResultHistoryEvenWhenNotInFocus();
+        Engine engineAux;
+        if(currentEngineUI == 0)
+            engineAux = new Engine(engineOne);
+        else if(currentEngineUI ==1)
+            engineAux = new Engine(engineTwo);
+        else
+            engineAux = new Engine(engineThree);
 
+
+        //update UI progresses
+        tvNumericalTemperature.setText(engineAux.getTemperatureValue() + " °C");
+        if(Double.parseDouble(engineAux.getTemperatureValue()) > 31)
+            tvNumericalTemperature.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
+        else
+            tvNumericalTemperature.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
+
+
+
+        pbPower.setMinMax(0,300);   //Wattage interval from 0 to 300;
+        pbPower.setProgress(Double.parseDouble(engineAux.getPowerValue()));
+        if(Double.parseDouble(engineAux.getPowerValue()) >150 && Double.parseDouble(engineAux.getPowerValue()) <250)
+            pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
+        else if (Double.parseDouble(engineAux.getPowerValue()) >250)
+            pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
+        else
+            pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
+
+        pbPowerFactor.setMinMax(0,1);
+        pbPowerFactor.setProgress(Double.parseDouble(engineAux.getPowerFactorValue()));
+        if(Double.parseDouble(engineAux.getPowerFactorValue()) >70 && Double.parseDouble(engineAux.getPowerFactorValue()) <90 )
+            pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
+        else if (Double.parseDouble(engineAux.getPowerFactorValue()) <70 )
+            pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
+        else
+            pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
+
+        pbTension.setMinMax(0,400);
+        pbTension.setProgress(Double.parseDouble(engineAux.getTensionValue()));
+        if(Double.parseDouble(engineAux.getTensionValue()) >200 && Double.parseDouble(engineAux.getTensionValue()) <240 )
+            pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
+        else if (Double.parseDouble(engineAux.getTensionValue()) >180 && Double.parseDouble(engineAux.getTensionValue()) <=200 )
+            pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
+        else
+            pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
+
+        pbAmperage.setMinMax(0,1);
+        pbAmperage.setProgress(Double.parseDouble(engineAux.getAmperageValue()));
+
+        populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI);
+
+    }
+
+
+    public void fetchLiveDataForEachEngine(ArrayList<ArrayList<String>> groupedEngines)
+    {
         for( int engineNumber=0; engineNumber < groupedEngines.size(); engineNumber++)
         {
-            if(currentEngineUI == engineNumber)
+
+            ArrayList<String> displayEngine = groupedEngines.get(engineNumber);
+
+            //get all the information for engine as a String
+            String allData = String.valueOf(displayEngine);
+            Log.w("Engine " + (engineNumber+1), allData);
+
+            //get rid of the [ in the begining and ] at the end in order to get unaltered values
+            String editedData = allData.substring(1,allData.length()-1);
+
+            //devide the string in order to get the exact values for each measurement
+            String divideData[] = editedData.split(",\\s*") ;// in ordet to split by , and space
+
+            // Create 5 atributes for each measurement of an engine
+            String temperatureTime = divideData[1];     //T
+            String temperatureValue = String.format("%.2f", Double.parseDouble(divideData[2])) ;    //T
+            String powerTime = divideData[4];           //P
+            String powerValue = String.format("%.2f", Double.parseDouble(divideData[5]));          //P
+            String powerFactorTime = divideData[7];     //PF
+            String powerFactorValue = String.format("%.2f", Double.parseDouble(divideData[8]));    //PF
+            String tensionTime = divideData[10];        //V
+            String tensionValue = String.format("%.2f", Double.parseDouble(divideData[11]));       //V
+            String amperageTime = divideData[13];       //I
+            String amperageValue = String.format("%.2f", Double.parseDouble(divideData[14]));      //I
+
+            if(engineNumber == 0)
             {
-                ArrayList<String> displayEngine = groupedEngines.get(engineNumber);
-
-                //get all the information for engine as a String
-                String allData = String.valueOf(displayEngine);
-                Log.w("Engine " + (engineNumber+1), allData);
-
-                //get rid of the [ in the begining and ] at the end in order to get unaltered values
-                String editedData = allData.substring(1,allData.length()-1);
-
-                //devide the string in order to get the exact values for each measurement
-                String divideData[] = editedData.split(",\\s*") ;// in ordet to split by , and space
-
-                // Create 5 atributes for each measurement of an engine
-                String temperatureTime = divideData[1];     //T
-                String temperatureValue = String.format("%.2f", Double.parseDouble(divideData[2])) ;    //T
-                String powerTime = divideData[4];           //P
-                String powerValue = String.format("%.2f", Double.parseDouble(divideData[5]));          //P
-                String powerFactorTime = divideData[7];     //PF
-                String powerFactorValue = String.format("%.2f", Double.parseDouble(divideData[8]));    //PF
-                String tensionTime = divideData[10];        //V
-                String tensionValue = String.format("%.2f", Double.parseDouble(divideData[11]));       //V
-                String amperageTime = divideData[13];       //I
-                String amperageValue = String.format("%.2f", Double.parseDouble(divideData[14]));      //I
-
-
-                //update UI progresses
-                tvNumericalTemperature.setText(temperatureValue + " °C");
-                if(Double.parseDouble(temperatureValue) > 31)
-                    tvNumericalTemperature.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
-                else
-                    tvNumericalTemperature.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
-
-                resultHistory.get(currentEngineUI).add(String.format("T%d, %s, %s",currentEngineUI,temperatureTime,temperatureValue));
-
-                pbPower.setMinMax(0,300);   //Wattage interval from 0 to 300;
-                pbPower.setProgress(Double.parseDouble(powerValue));
-                if(Double.parseDouble(powerValue) >150 && Double.parseDouble(powerValue) <250)
-                    pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
-                else if (Double.parseDouble(powerValue) >250)
-                    pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
-                else
-                    pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
-
-                pbPowerFactor.setMinMax(0,1);
-                pbPowerFactor.setProgress(Double.parseDouble(powerFactorValue));
-                if(Double.parseDouble(powerFactorValue) >70 && Double.parseDouble(powerFactorValue) <90 )
-                    pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
-                else if (Double.parseDouble(powerFactorValue) <70 )
-                    pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
-                else
-                    pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
-
-                pbTension.setMinMax(0,400);
-                pbTension.setProgress(Double.parseDouble(tensionValue));
-                if(Double.parseDouble(tensionValue) >200 && Double.parseDouble(tensionValue) <240 )
-                    pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
-                else if (Double.parseDouble(tensionValue) >180 && Double.parseDouble(tensionValue) <=200 )
-                    pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
-                else
-                    pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
-
-                pbAmperage.setMinMax(0,1);
-                pbAmperage.setProgress(Double.parseDouble(amperageValue));
-
-                populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI);
-
-
-
+                engineOne = new Engine(temperatureTime,temperatureValue,powerTime,powerValue,powerFactorTime,powerFactorValue,tensionTime,tensionValue,amperageTime,amperageValue);
             }
+            else if(engineNumber == 1)
+            {
+                engineTwo = new Engine(temperatureTime,temperatureValue,powerTime,powerValue,powerFactorTime,powerFactorValue,tensionTime,tensionValue,amperageTime,amperageValue);
+            }
+            else if(engineNumber ==2)
+            {
+                engineThree = new Engine(temperatureTime,temperatureValue,powerTime,powerValue,powerFactorTime,powerFactorValue,tensionTime,tensionValue,amperageTime,amperageValue);
+            }
+
 
         }
     }
