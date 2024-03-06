@@ -35,6 +35,7 @@ import java.util.Arrays;
 // DECI IN FUNCTIE DE DATELE PRIMITE DE LA INFLUX DB NE PUTEM DA SEAMA CATE MOTOARE TRANSMIT INFORMATII
 // O SA CREEZ ATATEA OBIECTE DE TIP MOTOR CATE SUNT TRANSMISE SI VOI POPULA UN RECYCLER VIEW SAU CEVA DE GENU CU ACESTE MOTOARE SI VOI PERMITE SA LE
 // ATINGI IN HOME ACTIVITY CA SA INTRII IN DASHBOARDUL FIECARUI MOTOR!
+//commit
 
 public class HomeActivity extends AppCompatActivity implements DataUpdateCallback {
     private BottomNavigationView bottomNavigation;
@@ -353,7 +354,6 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     }
 
     // func for update UI elements that will be called from dataChanged
-
     public void updateUI(ArrayList<ArrayList<String>> groupedEngines)
     {
 
