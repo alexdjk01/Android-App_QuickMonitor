@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="green_avocado">#21D0A3</color>
+    <color name="dark_blue_background">#181D30</color>
+    <color name="grey_colorHint">#757272</color>
+    <color name="blue_ediText">#242F57</color>
+    <color name="orange_alert">#FFD600</color>
+    <color name="red_cancel">#FFD32F2F</color>
+    <color name="white_graph">#B2B4B6</color>
+
+    <color name="green_measurement">#73bf69</color>
+    <color name="red_measurement">#f2495c</color>
+    <color name="yellow_measurement">#eab839</color>
+
+</resources>

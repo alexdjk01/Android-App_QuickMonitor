@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue_background"
+    tools:context=".ProfileActivity">
+
+
+    <TextView
+        android:id="@+id/profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="30dp"
+        android:text="Profile"
+        android:textColor="@color/green_avocado"
+        android:textSize="46dp"
+        android:fontFamily="@font/playfairdisplaybold"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvEmailLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Email"
+        android:fontFamily="@font/poppinsmedium"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginLeft="30dp"/>
+
+
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:backgroundTint="@color/blue_ediText"
+        android:textColor="@color/white"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="230dp"
+        android:background="@drawable/edit_text"
+        />
+
+    <ImageView
+        android:id="@+id/ivEditEmail"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:src="@drawable/edit"
+        android:layout_marginTop="240dp"
+        android:layout_marginLeft="320dp"
+
+        />
+
+    <TextView
+        android:id="@+id/tvPasswordLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Password"
+        android:fontFamily="@font/poppinsmedium"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:layout_marginTop="290dp"
+        android:layout_marginLeft="30dp"/>
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:backgroundTint="@color/blue_ediText"
+        android:inputType="text"
+        android:textColor="@color/white"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="320dp"
+        android:background="@drawable/edit_text"
+        />
+
+    <ImageView
+        android:id="@+id/ivEditPassword"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:src="@drawable/edit"
+        android:layout_marginTop="330dp"
+        android:layout_marginLeft="320dp"
+
+        />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="430dp"
+        android:layout_marginRight="40dp"
+        android:backgroundTint="@color/green_avocado"
+        android:gravity="center"
+        android:text="Save"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="490dp"
+        android:layout_marginRight="40dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        app:strokeColor="@color/green_avocado"
+        app:strokeWidth="2dp"
+        app:cornerRadius = "30dp"
+        android:textAllCaps="false"
+        android:text="Logout"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/green_avocado"
+        />
+    <!-- I ve used the style there in order to create an outline button because with xml shapes it didnt work -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="560dp"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textColor="@color/white"
+            android:text="Permanently disable account?"
+            android:layout_marginLeft="85dp"
+            />
+
+        <TextView
+            android:id="@+id/tvDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="#D32F2F"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:text="Delete" />
+
+    </LinearLayout>
+
+
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigationMenuBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/menu_bottom_navigation"
+        app:itemTextColor="@color/green_avocado"
+        app:itemIconTint="@color/green_avocado"
+        app:itemActiveIndicatorStyle="@color/blue_ediText"
+        android:background="@drawable/menu_filler_design"
+
+        />
+</RelativeLayout>

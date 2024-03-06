@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue_background"
+    tools:context=".SettingsActivity">
+
+
+    <TextView
+        android:id="@+id/Settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="30dp"
+        android:text="Settings"
+        android:textColor="@color/green_avocado"
+        android:textSize="46dp"
+        android:fontFamily="@font/playfairdisplaybold"
+        android:textStyle="bold" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigationMenuBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/menu_bottom_navigation"
+        app:itemTextColor="@color/green_avocado"
+        app:itemIconTint="@color/green_avocado"
+        app:itemActiveIndicatorStyle="@color/blue_ediText"
+        android:background="@drawable/menu_filler_design"
+
+        />
+</RelativeLayout>

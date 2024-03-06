@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue_background"
+    xmlns:ap="http://schemas.android.com/apk/res-auto"
+    tools:context=".HomeActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/btnEngine1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            app:strokeColor="@color/green_avocado"
+            app:strokeWidth="2dp"
+            app:cornerRadius = "30dp"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="@color/green_avocado"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:text="Engine 1" />
+
+        <Button
+            android:id="@+id/btnEngine2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            app:strokeColor="@color/green_avocado"
+            app:strokeWidth="2dp"
+            app:cornerRadius = "30dp"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="@color/green_avocado"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="Engine 2" />
+
+        <Button
+            android:id="@+id/btnEngine3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            app:strokeColor="@color/green_avocado"
+            app:strokeWidth="2dp"
+            app:cornerRadius = "30dp"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="@color/green_avocado"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:text="Engine 3" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/svHome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="81dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/tvNumericalTemperature"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:textColor="@color/green_measurement"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
+                android:text="NO DATA" />
+
+            <TextView
+                android:id="@+id/tvTemperature"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="Temperature" />
+
+            <ro.ase.dma.connectinfluxdb.SemiCircularProgressBar
+                android:id="@+id/pbPower"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_horizontal"
+                />
+
+
+            <TextView
+                android:id="@+id/tvPower"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="Power (W)" />
+
+            <ro.ase.dma.connectinfluxdb.SemiCircularProgressBar
+                android:id="@+id/pbPowerFactor"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_horizontal"
+                />
+
+
+            <TextView
+                android:id="@+id/tvPowerFactor"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="Power Factor" />
+
+            <ro.ase.dma.connectinfluxdb.SemiCircularProgressBar
+                android:id="@+id/pbTension"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_horizontal"
+                />
+
+
+            <TextView
+                android:id="@+id/tvTension"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="Electrical Tension (V)" />
+
+            <ro.ase.dma.connectinfluxdb.SemiCircularProgressBar
+                android:id="@+id/pbAmperage"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_horizontal"
+                />
+
+
+            <TextView
+                android:id="@+id/tvAmperage"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_marginBottom="60dp"
+                android:text="Amperage (A)" />
+
+
+            <com.androidplot.xy.XYPlot
+                android:id="@+id/graphPlot"
+                style="@style/APDefacto.Dark"
+                app:backgroundColor="@color/dark_blue_background"
+                android:layout_width="330dp"
+                ap:graphBackgroundColor = "@color/dark_blue_background"
+                ap:gridBackgroundColor="@color/dark_blue_background"
+                ap:domainLineColor = "@color/dark_blue_background"
+                ap:rangeLineColor = "@color/dark_blue_background"
+                ap:lineLabelTextSizeBottom ="10dp"
+                ap:lineLabelTextColorBottom = "@color/green_avocado"
+                ap:lineLabelTextColorLeft = "@color/green_avocado"
+                ap:domainOriginLineColor = "@color/green_avocado"
+                ap:rangeOriginLineColor = "@color/green_avocado"
+                android:layout_height="300dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="40dp"
+
+                >
+                <!--  domainLine is the column line and range is the rowLine -->
+                <!--  lineLabelTextColorLeft is the left and the other is bottom -->
+
+            </com.androidplot.xy.XYPlot>
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigationMenuBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/menu_bottom_navigation"
+        app:itemTextColor="@color/green_avocado"
+        app:itemIconTint="@color/green_avocado"
+        app:itemActiveIndicatorStyle="@color/blue_ediText"
+        android:background="@drawable/menu_filler_design"
+
+        />
+
+</RelativeLayout>

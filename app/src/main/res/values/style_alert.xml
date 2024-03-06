@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AlertDialogCustom" parent="Base.Theme.ConnectInfluxDB">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textSize">20dp</item>
+        <item name="colorAccent">@color/green_avocado</item>
+        <item name="android:background">@color/blue_ediText</item>
+    </style>
+
+</resources>
