@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -51,6 +54,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     private Button btnEngine1;
     private Button btnEngine2;
     private Button btnEngine3;
+
     private TextView tvNumericalTemperature;
 
     private SemiCircularProgressBar pbPower;
@@ -61,10 +65,13 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
     private XYPlot graphPlotTemperature;
 
+    private Spinner spinnerTimeTemperature;
+
 
     // global variable tht will keep track of which engine should be displayed!
     // default value is 1 to view engine no1
     private int currentEngineUI=2;
+    public int graphInterval=9; //default shows ony 9 values
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +91,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         pbAmperage = findViewById(R.id.pbAmperage);
 
         graphPlotTemperature = findViewById(R.id.graphPlot);
+        spinnerTimeTemperature = findViewById(R.id.spinnerTimeTemperature);
 
         bottomNavigation = findViewById(R.id.navigationMenuBar);
 
@@ -103,7 +111,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 btnEngine2.setTextColor(getApplicationContext().getColor(R.color.green_avocado));
                 btnEngine3.setTextColor(getApplicationContext().getColor(R.color.green_avocado));
                 currentEngineUI=0;
-                populateGraphHistory(graphPlotTemperature,0,40,0);
+                populateGraphHistory(graphPlotTemperature,0,40,0,graphInterval); //default: show only the last 9 values taken in the graph
                 updateUI(groupedEngines);
             }
         });
@@ -115,7 +123,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 btnEngine1.setTextColor(getApplicationContext().getColor(R.color.green_avocado));
                 btnEngine3.setTextColor(getApplicationContext().getColor(R.color.green_avocado));
                 currentEngineUI=1;
-                populateGraphHistory(graphPlotTemperature,0,40,1);
+                populateGraphHistory(graphPlotTemperature,0,40,1,graphInterval);
                 updateUI(groupedEngines);
             }
         });
@@ -127,10 +135,56 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 btnEngine1.setTextColor(getApplicationContext().getColor(R.color.green_avocado));
                 btnEngine2.setTextColor(getApplicationContext().getColor(R.color.green_avocado));
                 currentEngineUI=2;
-                populateGraphHistory(graphPlotTemperature,0,40,2);
+                populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
                 updateUI(groupedEngines);
             }
         });
+
+        //we need ArrayAdapted to populate a Spinner with the values in the string array situated in res/strings
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.time_intervals, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinnerTimeTemperature.setAdapter(adapter);
+
+//       spinnerTimeTemperature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//           @Override
+//           public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+//               String clickedInterval = adapterView.getItemAtPosition(pos).toString();
+//               if(clickedInterval.equals("1m")){
+//                    graphInterval=5;
+//                    populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
+//               }
+//               else if (clickedInterval.equals("3m")){
+//                    graphInterval=15;
+//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
+//               }
+//               else if (clickedInterval.equals("10m")){
+//                    graphInterval=50;
+//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
+//               }
+//               else if (clickedInterval.equals("30m")){
+//                   graphInterval=150;
+//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
+//               }
+//               else if (clickedInterval.equals("1h")){
+//                   graphInterval=300;
+//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
+//               }
+//               else if (clickedInterval.equals("3h")){
+//                   graphInterval=900;
+//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
+//               }
+//               else if (clickedInterval.equals("24h")){
+//                   graphInterval=7200;
+//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
+//               }
+//           }
+//
+//           @Override
+//           public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//           }
+//       });
 
         //we use setOnItemSelected for the bottom navigation bar and will write the implementation of each "button" in the menu
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -174,18 +228,18 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             influxDBContinuousFetcher.stopFetchingData();
         }
     }
-    public void graphPlotFunction(XYPlot plot, int lowerBoundry, int upperBoundry, ArrayList<String> domainLabels, Double[] seriesNumbers)
+    public void graphPlotFunction(XYPlot plot, int lowerBoundry, int upperBoundry, ArrayList<String> domainLabels, Double[] seriesNumbers, int interval)
     {
         plot.clear();
         XYSeries series1 = new SimpleXYSeries(Arrays.asList(seriesNumbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Temperatures");
 
         //to show in focus only the last 10 elements
         int endIndex = series1.size()-1;
-        int startIndex = Math.max(0,endIndex-9);
+        int startIndex = Math.max(0,endIndex-interval);
 
         LineAndPointFormatter series1Format = new LineAndPointFormatter(
                 getApplicationContext().getColor(R.color.green_avocado),
-                getApplicationContext().getColor(R.color.red_measurement),
+                getApplicationContext().getColor(R.color.green_avocado),
                 getApplicationContext().getColor(R.color.blue_ediText),
                 null);
 
@@ -200,11 +254,17 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             @Override
             public StringBuffer format(Object obj, StringBuffer stringBuffer, FieldPosition fieldPosition) {
                 int index = Math.round(((Number) obj).floatValue());
-                if (index >= 0 && index < domainLabels.size()) {
-                    return stringBuffer.append(domainLabels.get(index));
-                } else {
-                    return stringBuffer;
+                if(endIndex-startIndex <= 10)
+                {
+                    if (index >= 0 && index < domainLabels.size()) {
+                        return stringBuffer.append(domainLabels.get(index));
+                    } else {
+                        return stringBuffer;
+                    }
                 }
+                else
+                    return stringBuffer.append("");
+
             }
 
             @Override
@@ -217,7 +277,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
     }
 
-    public void populateGraphHistory(XYPlot plot,int lowerBoundry,int upperBoundry,int index)
+    public void populateGraphHistory(XYPlot plot,int lowerBoundry,int upperBoundry,int index, int interval)
     {
         ArrayList<String> arrayTime = new ArrayList<>();
         ArrayList<String> arrayValue= new ArrayList<>();
@@ -250,7 +310,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                graphPlotFunction(plot,lowerBoundry,upperBoundry,arrayTime, doubleArray);
+                graphPlotFunction(plot,lowerBoundry,upperBoundry,arrayTime, doubleArray, interval);
                 plot.redraw();
             }
         });
@@ -352,15 +412,16 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
     }
 
-
+    //%d
     public void loadDataSeparatelyAndSaveItInResultHistoryEvenWhenNotInFocus(){
-        resultHistory.get(0).add(String.format("T%d, %s, %s",0,engineOne.getTemperatureTime(),engineOne.getTemperatureValue()));
-        resultHistory.get(1).add(String.format("T%d, %s, %s",1,engineTwo.getTemperatureTime(),engineTwo.getTemperatureValue()));
-        resultHistory.get(2).add(String.format("T%d, %s, %s",2,engineThree.getTemperatureTime(),engineThree.getTemperatureValue()));
+        resultHistory.get(0).add(String.format("T%d, %s, %f",0,engineOne.getTemperatureTime(),engineOne.getTemperatureValue()));
+        resultHistory.get(1).add(String.format("T%d, %s, %f",1,engineTwo.getTemperatureTime(),engineTwo.getTemperatureValue()));
+        resultHistory.get(2).add(String.format("T%d, %s, %f",2,engineThree.getTemperatureTime(),engineThree.getTemperatureValue()));
     }
 
     // func for update UI elements that will be called from dataChanged
 
+    // fara double parse la unele
     public void updateUI(ArrayList<ArrayList<String>> groupedEngines)
     {
         fetchLiveDataForEachEngine(groupedEngines);
@@ -375,8 +436,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
 
         //update UI progresses
-        tvNumericalTemperature.setText(engineAux.getTemperatureValue() + " °C");
-        if(Double.parseDouble(engineAux.getTemperatureValue()) > 31)
+        tvNumericalTemperature.setText(String.format("%.2f °C", engineAux.getTemperatureValue()));
+        if(engineAux.getTemperatureValue() > 31)
             tvNumericalTemperature.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
         else
             tvNumericalTemperature.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
@@ -384,40 +445,41 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
 
         pbPower.setMinMax(0,300);   //Wattage interval from 0 to 300;
-        pbPower.setProgress(Double.parseDouble(engineAux.getPowerValue()));
-        if(Double.parseDouble(engineAux.getPowerValue()) >150 && Double.parseDouble(engineAux.getPowerValue()) <250)
+        pbPower.setProgress(engineAux.getPowerValue());
+        if(engineAux.getPowerValue() >150 && engineAux.getPowerValue() <250)
             pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
-        else if (Double.parseDouble(engineAux.getPowerValue()) >250)
+        else if (engineAux.getPowerValue() >250)
             pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
         else
             pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
 
         pbPowerFactor.setMinMax(0,1);
-        pbPowerFactor.setProgress(Double.parseDouble(engineAux.getPowerFactorValue()));
-        if(Double.parseDouble(engineAux.getPowerFactorValue()) >70 && Double.parseDouble(engineAux.getPowerFactorValue()) <90 )
+        pbPowerFactor.setProgress(engineAux.getPowerFactorValue());
+        if(engineAux.getPowerFactorValue() >70 && engineAux.getPowerFactorValue() <90 )
             pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
-        else if (Double.parseDouble(engineAux.getPowerFactorValue()) <70 )
+        else if (engineAux.getPowerFactorValue() <70 )
             pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
         else
             pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
 
         pbTension.setMinMax(0,400);
-        pbTension.setProgress(Double.parseDouble(engineAux.getTensionValue()));
-        if(Double.parseDouble(engineAux.getTensionValue()) >200 && Double.parseDouble(engineAux.getTensionValue()) <240 )
+        pbTension.setProgress(engineAux.getTensionValue());
+        if(engineAux.getTensionValue() >200 && engineAux.getTensionValue() <240 )
             pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
-        else if (Double.parseDouble(engineAux.getTensionValue()) >180 && Double.parseDouble(engineAux.getTensionValue()) <=200 )
+        else if (engineAux.getTensionValue() >180 && engineAux.getTensionValue() <=200 )
             pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
         else
             pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
 
         pbAmperage.setMinMax(0,1);
-        pbAmperage.setProgress(Double.parseDouble(engineAux.getAmperageValue()));
+        pbAmperage.setProgress(engineAux.getAmperageValue());
 
-        populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI);
+        populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval);
 
     }
 
 
+    //save direclty double not String
     public void fetchLiveDataForEachEngine(ArrayList<ArrayList<String>> groupedEngines)
     {
         for( int engineNumber=0; engineNumber < groupedEngines.size(); engineNumber++)
@@ -437,15 +499,15 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
             // Create 5 atributes for each measurement of an engine
             String temperatureTime = divideData[1];     //T
-            String temperatureValue = String.format("%.2f", Double.parseDouble(divideData[2])) ;    //T
+            Double temperatureValue = Double.parseDouble(divideData[2]) ;    //T
             String powerTime = divideData[4];           //P
-            String powerValue = String.format("%.2f", Double.parseDouble(divideData[5]));          //P
+            Double powerValue =  Double.parseDouble(divideData[5]);          //P
             String powerFactorTime = divideData[7];     //PF
-            String powerFactorValue = String.format("%.2f", Double.parseDouble(divideData[8]));    //PF
+            Double powerFactorValue = Double.parseDouble(divideData[8]);    //PF
             String tensionTime = divideData[10];        //V
-            String tensionValue = String.format("%.2f", Double.parseDouble(divideData[11]));       //V
+            Double tensionValue = Double.parseDouble(divideData[11]);       //V
             String amperageTime = divideData[13];       //I
-            String amperageValue = String.format("%.2f", Double.parseDouble(divideData[14]));      //I
+            Double amperageValue =  Double.parseDouble(divideData[14]);      //I
 
             if(engineNumber == 0)
             {

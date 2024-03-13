@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">ConnectInfluxDB</string>
+
+    <string-array name="time_intervals">
+        <item>1m</item>
+        <item>3m</item>
+        <item>10m</item>
+        <item>30m</item>
+        <item>1h</item>
+        <item>5h</item>
+        <item>24h</item>
+    </string-array>
 </resources>

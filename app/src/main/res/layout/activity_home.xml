@@ -196,11 +196,22 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="40dp"
 
+
                 >
                 <!--  domainLine is the column line and range is the rowLine -->
                 <!--  lineLabelTextColorLeft is the left and the other is bottom -->
 
             </com.androidplot.xy.XYPlot>
+
+            <Spinner
+                android:id="@+id/spinnerTimeTemperature"
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="-340dp"
+                android:layout_marginLeft="275dp"
+                android:background="@drawable/time_interval_spinner"
+
+                />
 
 
         </LinearLayout>

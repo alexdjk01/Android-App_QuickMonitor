@@ -7,18 +7,19 @@ import java.util.Objects;
 
 public class Engine implements Parcelable {
 
+    //double no String
     String temperatureTime;     //T
-    String temperatureValue ;    //T
+    Double temperatureValue ;    //T
     String powerTime;           //P
-    String powerValue;          //P
+    Double powerValue;          //P
     String powerFactorTime;     //PF
-    String powerFactorValue;    //PF
+    Double powerFactorValue;    //PF
     String tensionTime;        //V
-    String tensionValue;       //V
+    Double tensionValue;       //V
     String amperageTime;       //I
-    String amperageValue;      //I
+    Double amperageValue;      //I
 
-    public Engine(String temperatureTime, String temperatureValue, String powerTime, String powerValue, String powerFactorTime, String powerFactorValue, String tensionTime, String tensionValue, String amperageTime, String amperageValue) {
+    public Engine(String temperatureTime, Double temperatureValue, String powerTime, Double powerValue, String powerFactorTime, Double powerFactorValue, String tensionTime, Double tensionValue, String amperageTime, Double amperageValue) {
         this.temperatureTime = temperatureTime;
         this.temperatureValue = temperatureValue;
         this.powerTime = powerTime;
@@ -84,11 +85,11 @@ public class Engine implements Parcelable {
         this.temperatureTime = temperatureTime;
     }
 
-    public String getTemperatureValue() {
+    public Double getTemperatureValue() {
         return temperatureValue;
     }
 
-    public void setTemperatureValue(String temperatureValue) {
+    public void setTemperatureValue(Double temperatureValue) {
         this.temperatureValue = temperatureValue;
     }
 
@@ -100,11 +101,11 @@ public class Engine implements Parcelable {
         this.powerTime = powerTime;
     }
 
-    public String getPowerValue() {
+    public Double getPowerValue() {
         return powerValue;
     }
 
-    public void setPowerValue(String powerValue) {
+    public void setPowerValue(Double powerValue) {
         this.powerValue = powerValue;
     }
 
@@ -116,11 +117,11 @@ public class Engine implements Parcelable {
         this.powerFactorTime = powerFactorTime;
     }
 
-    public String getPowerFactorValue() {
+    public Double getPowerFactorValue() {
         return powerFactorValue;
     }
 
-    public void setPowerFactorValue(String powerFactorValue) {
+    public void setPowerFactorValue(Double powerFactorValue) {
         this.powerFactorValue = powerFactorValue;
     }
 
@@ -132,11 +133,11 @@ public class Engine implements Parcelable {
         this.tensionTime = tensionTime;
     }
 
-    public String getTensionValue() {
+    public Double getTensionValue() {
         return tensionValue;
     }
 
-    public void setTensionValue(String tensionValue) {
+    public void setTensionValue(Double tensionValue) {
         this.tensionValue = tensionValue;
     }
 
@@ -148,39 +149,39 @@ public class Engine implements Parcelable {
         this.amperageTime = amperageTime;
     }
 
-    public String getAmperageValue() {
+    public Double getAmperageValue() {
         return amperageValue;
     }
 
-    public void setAmperageValue(String amperageValue) {
+    public void setAmperageValue(Double amperageValue) {
         this.amperageValue = amperageValue;
     }
 
     protected Engine(Parcel in) {
         temperatureTime = in.readString();
-        temperatureValue = in.readString();
+        temperatureValue = in.readDouble();
         powerTime = in.readString();
-        powerValue = in.readString();
+        powerValue = in.readDouble();
         powerFactorTime = in.readString();
-        powerFactorValue = in.readString();
+        powerFactorValue = in.readDouble();
         tensionTime = in.readString();
-        tensionValue = in.readString();
+        tensionValue = in.readDouble();
         amperageTime = in.readString();
-        amperageValue = in.readString();
+        amperageValue = in.readDouble();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(temperatureTime);
-        dest.writeString(temperatureValue);
+        dest.writeDouble(temperatureValue);
         dest.writeString(powerTime);
-        dest.writeString(powerValue);
+        dest.writeDouble(powerValue);
         dest.writeString(powerFactorTime);
-        dest.writeString(powerFactorValue);
+        dest.writeDouble(powerFactorValue);
         dest.writeString(tensionTime);
-        dest.writeString(tensionValue);
+        dest.writeDouble(tensionValue);
         dest.writeString(amperageTime);
-        dest.writeString(amperageValue);
+        dest.writeDouble(amperageValue);
     }
 
     @Override
