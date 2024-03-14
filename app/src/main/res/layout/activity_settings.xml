@@ -20,6 +20,261 @@
         android:fontFamily="@font/playfairdisplaybold"
         android:textStyle="bold" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/notificationTemperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Temperature"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+            <Switch
+                android:id="@+id/switchTemperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:paddingLeft="-20dp"
+                android:paddingRight="10dp"
+                android:layout_marginLeft="33dp"
+                android:thumbTint="@color/switch_custom"
+                android:trackTint="@color/switch_custom_track"
+                android:text="Switch" />
+
+            <EditText
+                android:id="@+id/etNotifyTempMin"
+                android:hint="MIN"
+                android:inputType="number"
+                android:textColorHint="@color/grey_colorHint"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+            <TextView
+                android:id="@+id/tvLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/grey_colorHint"
+                android:textStyle="bold"
+                android:text="|" />
+
+            <EditText
+                android:id="@+id/etNotifyTempMax"
+                android:hint="MAX"
+                android:inputType="number"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:textColorHint="@color/grey_colorHint"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/notificationPower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Power (W)     "
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+            <Switch
+                android:id="@+id/switchPower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:paddingLeft="-20dp"
+                android:paddingRight="10dp"
+                android:layout_marginLeft="33dp"
+                android:thumbTint="@color/switch_custom"
+                android:trackTint="@color/switch_custom_track"
+                android:text="Switch" />
+
+            <EditText
+                android:id="@+id/etNotifyPowerMin"
+                android:hint="MIN"
+                android:inputType="number"
+                android:textColorHint="@color/grey_colorHint"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+            <TextView
+                android:id="@+id/tvLine2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/grey_colorHint"
+                android:textStyle="bold"
+                android:text="|" />
+
+            <EditText
+                android:id="@+id/etNotifyPowerMax"
+                android:hint="MAX"
+                android:inputType="number"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:textColorHint="@color/grey_colorHint"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/notificationPowerFactor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Power Factor"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+            <Switch
+                android:id="@+id/switchPowerFactor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:paddingLeft="-20dp"
+                android:paddingRight="10dp"
+                android:layout_marginLeft="33dp"
+                android:thumbTint="@color/switch_custom"
+                android:trackTint="@color/switch_custom_track"
+                android:text="Switch" />
+
+            <EditText
+                android:id="@+id/etNotifyPFMin"
+                android:hint="MIN"
+                android:inputType="number"
+                android:textColorHint="@color/grey_colorHint"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+            <TextView
+                android:id="@+id/tvLine3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/grey_colorHint"
+                android:textStyle="bold"
+                android:text="|" />
+
+            <EditText
+                android:id="@+id/etNotifyPFMax"
+                android:hint="MAX"
+                android:inputType="number"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:textColorHint="@color/grey_colorHint"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/notificationTension"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Electrical Tension"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+            <Switch
+                android:id="@+id/switchTension"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:paddingLeft="-20dp"
+                android:paddingRight="10dp"
+                android:thumbTint="@color/switch_custom"
+                android:trackTint="@color/switch_custom_track"
+                android:text="Switch" />
+
+            <EditText
+                android:id="@+id/etNotifyTensionMin"
+                android:hint="MIN"
+                android:inputType="number"
+                android:textColorHint="@color/grey_colorHint"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+            <TextView
+                android:id="@+id/tvLine4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/grey_colorHint"
+                android:textStyle="bold"
+                android:text="|" />
+
+            <EditText
+                android:id="@+id/etNotifyTensionMax"
+                android:hint="MAX"
+                android:inputType="number"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:textColorHint="@color/grey_colorHint"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigationMenuBar"
         android:layout_width="match_parent"
