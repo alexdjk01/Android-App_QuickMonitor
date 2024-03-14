@@ -209,7 +209,10 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 {
 
                     Intent toSettingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                    toSettingsIntent.putExtra("keyHome",receivedUserLogged);
+                    toSettingsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(toSettingsIntent);
+
                 }
                 else
                 {

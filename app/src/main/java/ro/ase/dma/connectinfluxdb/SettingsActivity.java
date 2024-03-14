@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import com.google.android.material.navigation.NavigationBarView;
 public class SettingsActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigation;
+    private User receivedUserHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,15 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         bottomNavigation = findViewById(R.id.navigationMenuBar);
+
+        Intent receivedIntentLogged = getIntent();
+        if(receivedIntentLogged!=null) {
+            receivedUserHome = receivedIntentLogged.getParcelableExtra("keyHome");
+            if (receivedUserHome != null) {
+                Log.e("Profile activity: ", receivedUserHome.toString());
+                // data was loaded correctly
+            }
+        }
 
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -37,10 +48,10 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 else
                 {
-
                     Intent toProfileIntent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    toProfileIntent.putExtra("keyHome",receivedUserHome);
+                    toProfileIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(toProfileIntent);
-                    Toast.makeText(getApplicationContext(),"Profile PRESSED!",Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
