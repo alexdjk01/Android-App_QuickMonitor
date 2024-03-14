@@ -3,6 +3,7 @@
 
     <string-array name="time_intervals">
         <item>1m</item>
+        <item>2m</item>
         <item>3m</item>
         <item>10m</item>
         <item>30m</item>

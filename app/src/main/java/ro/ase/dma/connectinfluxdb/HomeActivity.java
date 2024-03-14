@@ -146,45 +146,56 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinnerTimeTemperature.setAdapter(adapter);
 
-//       spinnerTimeTemperature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//           @Override
-//           public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-//               String clickedInterval = adapterView.getItemAtPosition(pos).toString();
-//               if(clickedInterval.equals("1m")){
-//                    graphInterval=5;
-//                    populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
-//               }
-//               else if (clickedInterval.equals("3m")){
-//                    graphInterval=15;
-//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
-//               }
-//               else if (clickedInterval.equals("10m")){
-//                    graphInterval=50;
-//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
-//               }
-//               else if (clickedInterval.equals("30m")){
-//                   graphInterval=150;
-//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
-//               }
-//               else if (clickedInterval.equals("1h")){
-//                   graphInterval=300;
-//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
-//               }
-//               else if (clickedInterval.equals("3h")){
-//                   graphInterval=900;
-//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
-//               }
-//               else if (clickedInterval.equals("24h")){
-//                   graphInterval=7200;
-//                   populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval);
-//               }
-//           }
-//
-//           @Override
-//           public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//           }
-//       });
+       spinnerTimeTemperature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+           @Override
+           public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+               String clickedInterval = adapterView.getItemAtPosition(pos).toString();
+               if(!resultHistory.isEmpty())
+               {
+                   if(clickedInterval.equals("1m")){
+                       graphInterval=5;
+                       populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval);
+                   }
+                   else if (clickedInterval.equals("2m")){
+                       graphInterval=10;
+                       populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval);
+                   }
+                   else if (clickedInterval.equals("3m")){
+                       graphInterval=15;
+                       populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval);
+                   }
+                   else if (clickedInterval.equals("10m")){
+                       graphInterval=50;
+                       populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval);
+                   }
+                   else if (clickedInterval.equals("30m")){
+                       graphInterval=150;
+                       populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval);
+                   }
+                   else if (clickedInterval.equals("1h")){
+                       graphInterval=300;
+                       populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval);
+                   }
+                   else if (clickedInterval.equals("3h")){
+                       graphInterval=900;
+                       populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval);
+                   }
+                   else if (clickedInterval.equals("24h")){
+                       graphInterval=7200;
+                       populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval);
+                   }
+               }
+               else
+               {
+                   Log.w("resultHistoryEmpty", resultHistory.toString());
+               }
+           }
+
+           @Override
+           public void onNothingSelected(AdapterView<?> adapterView) {
+
+           }
+       });
 
         //we use setOnItemSelected for the bottom navigation bar and will write the implementation of each "button" in the menu
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
