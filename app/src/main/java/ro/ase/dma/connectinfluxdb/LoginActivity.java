@@ -12,6 +12,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
+
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,6 +35,18 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page);
+
+
+        // Update the security provider to protect against SSL exploits
+        try {
+            ProviderInstaller.installIfNeeded(getApplicationContext());
+        } catch (GooglePlayServicesRepairableException e) {
+            // Indicates that Google Play Services is outdated or unavailable.
+            // Prompt the user to install/update Google Play Services.
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // Indicates that Google Play Services is not available and the problem is not easily resolvable.
+        }
+
 
         btnLogin = findViewById(R.id.btnLogin);
         etEmail = findViewById(R.id.etEmail);
@@ -81,12 +97,18 @@ public class LoginActivity extends AppCompatActivity {
                                 {
                                     Log.w("USERRRRRR", loggedUser.toString());
 
-                                    //kakashi@gmail.com  Kaka123
-                                    // need to lunch the main dashboard
+                                    // ------------------------------------------
+//                                    EmailCommunication emailCommunication = new EmailCommunication("ionelalexandru01@gmail.com","mfjhltkgndvfbksj",loggedUser.getEmail(),"smtp.gmail.com");
+//                                    emailCommunication.addProperties();
+//                                    emailCommunication.addSession();
+//                                    emailCommunication.generateMimeMessage("First Message");
+//                                    emailCommunication.sendMessage();
 
+                                    // need to lunch the main dashboard
                                     runOnUiThread(new Runnable() {      // get back on the main thread to start a new activity
                                         @Override
                                         public void run() {
+
                                             Intent loginIntent = new Intent(getApplicationContext(), HomeActivity.class);
                                             loginIntent.putExtra("keyLogin", loggedUser);
                                             loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

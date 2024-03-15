@@ -26,6 +26,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    packagingOptions{
+        exclude("META-INF/NOTICE.md")
+        exclude("META-INF/LICENSE.md")
+    }
 }
 
 dependencies {
@@ -42,7 +47,11 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
-
+    //mail service
+    implementation("com.sun.mail:android-mail:1.6.7")
+    implementation("com.sun.mail:android-activation:1.6.7")
+    //update security providers
+    implementation ("com.google.android.gms:play-services-auth:21.0.0")
 
 
     implementation ("com.airbnb.android:lottie:6.3.0") // lottie for gif in the start page

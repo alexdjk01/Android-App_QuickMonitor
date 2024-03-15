@@ -63,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
         etAmperageMax = findViewById(R.id.etNotifyAmperageMax);
 
         btnSaveSettings = findViewById(R.id.btnSaveSettings);
-        
+
         bottomNavigation = findViewById(R.id.navigationMenuBar);
 
         Intent receivedIntentLogged = getIntent();
