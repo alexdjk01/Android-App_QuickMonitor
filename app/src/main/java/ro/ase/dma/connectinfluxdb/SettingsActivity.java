@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -17,11 +20,50 @@ public class SettingsActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
     private User receivedUserHome;
 
+    Switch swTemperature;
+    Switch swPower;
+    Switch swPowerFactor;
+    Switch swTension;
+    Switch swAmperage;
+
+    EditText etTemperatureMin;
+    EditText etPowerMin;
+    EditText etPowerFactorMin;
+    EditText etTensionMin;
+    EditText etAmperageMin;
+    EditText etTemperatureMax;
+    EditText etPowerMax;
+    EditText etPowerFactorMax;
+    EditText etTensionMax;
+    EditText etAmperageMax;
+
+    Button btnSaveSettings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+
+        swTemperature = findViewById(R.id.switchTemperature);
+        swPower = findViewById(R.id.switchPower);
+        swPowerFactor = findViewById(R.id.switchPowerFactor);
+        swTension = findViewById(R.id.switchTension);
+        swAmperage = findViewById(R.id.switchAmperage);
+
+        etTemperatureMin = findViewById(R.id.etNotifyTempMin);
+        etTemperatureMax = findViewById(R.id.etNotifyTempMax);
+        etPowerMin = findViewById(R.id.etNotifyPowerMin);
+        etPowerMax = findViewById(R.id.etNotifyPowerMax);
+        etPowerFactorMin = findViewById(R.id.etNotifyPFMin);
+        etPowerFactorMax = findViewById(R.id.etNotifyPFMax);
+        etTensionMin = findViewById(R.id.etNotifyTensionMin);
+        etTensionMax = findViewById(R.id.etNotifyTensionMax);
+        etAmperageMin = findViewById(R.id.etNotifyAmperageMin);
+        etAmperageMax = findViewById(R.id.etNotifyAmperageMax);
+
+        btnSaveSettings = findViewById(R.id.btnSaveSettings);
+        
         bottomNavigation = findViewById(R.id.navigationMenuBar);
 
         Intent receivedIntentLogged = getIntent();

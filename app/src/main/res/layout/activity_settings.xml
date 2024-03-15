@@ -348,7 +348,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnSaveSettings"
             android:layout_width="match_parent"
             android:layout_height="59dp"
             android:layout_gravity="center_vertical"
