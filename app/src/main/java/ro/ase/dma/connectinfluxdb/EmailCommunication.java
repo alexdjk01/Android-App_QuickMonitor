@@ -14,10 +14,9 @@ import javax.mail.internet.MimeMessage;
 
 public class EmailCommunication {
 
-    private String senderEmail;
-    private String senderPassword;
-    private String receiverEmail;
-    private String hostDomain;
+    private String stringSenderEmail;
+    private String stringReceiverEmail;
+    private String stringPasswordSenderEmail;
 
     private Properties properties = System.getProperties();
 
@@ -29,22 +28,19 @@ public class EmailCommunication {
     public EmailCommunication(){
 
     }
-    public EmailCommunication(String senderEmail,String senderPassword, String receiverEmail, String hostDomain) {
-        this.senderEmail = senderEmail;
-        this.receiverEmail = receiverEmail;
-        this.hostDomain = hostDomain;
-        this.senderPassword=senderPassword;
+    public EmailCommunication(String senderEmail,String senderPassword, String receiverEmail) {
+        this.stringSenderEmail = senderEmail;
+        this.stringReceiverEmail = receiverEmail;
+        this.stringPasswordSenderEmail=senderPassword;
     }
 
-    public void sendEmail(){
+    public void sendEmail(String text){
 
 
         try {
-            String stringSenderEmail = "ionelalexandru01@gmail.com";
-            String stringReceiverEmail = "djkmata.djkmata@gmail.com";
-            String stringPasswordSenderEmail = "mfjhltkgndvfbksj";  //mfjh ltkg ndvf bksj
-
-            String stringHost = "smtp.gmail.com";
+           // String stringSenderEmail = "ionelalexandru01@gmail.com";
+           // String stringReceiverEmail = "djkmata.djkmata@gmail.com";
+           // String stringPasswordSenderEmail = "mfjhltkgndvfbksj";  //mfjh ltkg ndvf bksj
 
             Properties properties = new Properties();
 
@@ -75,7 +71,7 @@ public class EmailCommunication {
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(stringReceiverEmail));
 
             mimeMessage.setSubject("Subject: QuickMonitor Alert");
-            mimeMessage.setText("Hello Programmer, \n\nProgrammer World has sent you this 2nd email. \n\n Cheers!\nProgrammer World");
+            mimeMessage.setText(text);
 
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -99,35 +95,28 @@ public class EmailCommunication {
     }
 
     public String getSenderPassword() {
-        return senderPassword;
+        return stringPasswordSenderEmail;
     }
 
     public void setSenderPassword(String senderPassword) {
-        this.senderPassword = senderPassword;
+        this.stringPasswordSenderEmail = senderPassword;
     }
 
     public String getSenderEmail() {
-        return senderEmail;
+        return stringSenderEmail;
     }
 
     public void setSenderEmail(String senderEmail) {
-        this.senderEmail = senderEmail;
+        this.stringSenderEmail = senderEmail;
     }
 
     public String getReceiverEmail() {
-        return receiverEmail;
+        return stringReceiverEmail;
     }
 
     public void setReceiverEmail(String receiverEmail) {
-        this.receiverEmail = receiverEmail;
+        this.stringReceiverEmail = receiverEmail;
     }
 
-    public String getHostDomain() {
-        return hostDomain;
-    }
-
-    public void setHostDomain(String hostDomain) {
-        this.hostDomain = hostDomain;
-    }
 
 }

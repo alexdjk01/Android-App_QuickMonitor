@@ -98,8 +98,8 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.w("USERRRRRR", loggedUser.toString());
 
                                     // ------------------------------------------
-                                    EmailCommunication emailCommunication = new EmailCommunication();
-                                    emailCommunication.sendEmail();
+                                    EmailCommunication emailCommunication = new EmailCommunication("ionelalexandru01@gmail.com","mfjhltkgndvfbksj","djkmata.djkmata@gmail.com");
+                                    emailCommunication.sendEmail("Something");
 
                                     // need to lunch the main dashboard
                                     runOnUiThread(new Runnable() {      // get back on the main thread to start a new activity
