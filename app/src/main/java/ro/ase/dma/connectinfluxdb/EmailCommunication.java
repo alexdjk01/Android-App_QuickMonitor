@@ -25,6 +25,10 @@ public class EmailCommunication {
 
     private MimeMessage mimeMessage;
 
+
+    public EmailCommunication(){
+
+    }
     public EmailCommunication(String senderEmail,String senderPassword, String receiverEmail, String hostDomain) {
         this.senderEmail = senderEmail;
         this.receiverEmail = receiverEmail;
@@ -32,53 +36,66 @@ public class EmailCommunication {
         this.senderPassword=senderPassword;
     }
 
-    public void addProperties(){
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.ssl.enable", "true");
-
-        //properties.put("mail.smtp.starttls.enable", "true");
+    public void sendEmail(){
 
 
-    }
-
-    public void addSession(){
-        session = Session.getInstance(properties, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(senderEmail,senderPassword);
-            }
-        });
-        session.setDebug(true);
-    }
-
-    public void generateMimeMessage(String emailMessage){
-
-        mimeMessage = new MimeMessage(session);
         try {
-            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(receiverEmail));
-            mimeMessage.setSubject("Subject: Monitor Alert");
-            mimeMessage.setText(String.format("Quick Monitor App Alert!  \n \n %s", emailMessage));
-        } catch (AddressException e) {
-            throw new RuntimeException(e);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+            String stringSenderEmail = "ionelalexandru01@gmail.com";
+            String stringReceiverEmail = "djkmata.djkmata@gmail.com";
+            String stringPasswordSenderEmail = "mfjhltkgndvfbksj";  //mfjh ltkg ndvf bksj
 
-    public void sendMessage(){
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Transport.send(mimeMessage);
-                } catch (MessagingException e) {
-                    throw new RuntimeException(e);
+            String stringHost = "smtp.gmail.com";
+
+            Properties properties = new Properties();
+
+//            properties.put("mail.smtp.host", stringHost);
+//            properties.put("mail.smtp.port", "465");
+//            properties.put("mail.smtp.ssl.enable", "true");
+//            properties.put("mail.smtp.auth", "true");
+//            properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+//            properties.put("mail.smtp.socketFactory.port", "465");
+
+            //Try using TLS - working!
+            properties.put("mail.smtp.host", "smtp.gmail.com");
+            properties.put("mail.smtp.port", "587");
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.starttls.enable", "true"); //TLS
+            properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+
+            javax.mail.Session session = Session.getInstance(properties, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(stringSenderEmail, stringPasswordSenderEmail);
                 }
-            }
-        });
-        thread.start();
+            });
+
+            session.setDebug(true);
+
+            MimeMessage mimeMessage = new MimeMessage(session);
+            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(stringReceiverEmail));
+
+            mimeMessage.setSubject("Subject: QuickMonitor Alert");
+            mimeMessage.setText("Hello Programmer, \n\nProgrammer World has sent you this 2nd email. \n\n Cheers!\nProgrammer World");
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Transport.send(mimeMessage);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+
+        } catch (AddressException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public String getSenderPassword() {
