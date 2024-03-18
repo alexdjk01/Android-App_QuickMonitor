@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -39,6 +42,9 @@ public class SettingsActivity extends AppCompatActivity {
     EditText etAmperageMax;
 
     Button btnSaveSettings;
+
+    SharedPreferences sharedPreferences;
+    private static final String SHARED_PREFERENCES_NAME = "notifications";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +82,50 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
+        populateEditText();
+
         btnSaveSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(swTemperature.isChecked()){
+                sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
 
+                if(swTemperature.isChecked()){
+                    editor.putFloat("minTemperature",Float.parseFloat(etTemperatureMin.getText().toString()));
+                    editor.putFloat("maxTemperature",Float.parseFloat(etTemperatureMax.getText().toString()));
                 }
+                if(swPower.isChecked())
+                {
+                    editor.putFloat("minPower",Float.parseFloat(etPowerMin.getText().toString()));
+                    editor.putFloat("maxPower",Float.parseFloat(etPowerMax.getText().toString()));
+                }
+                if(swPowerFactor.isChecked())
+                {
+                    editor.putFloat("minPowerFactor",Float.parseFloat(etPowerFactorMin.getText().toString()));
+                    editor.putFloat("maxPowerFactor",Float.parseFloat(etPowerFactorMax.getText().toString()));
+                }
+                if(swTension.isChecked())
+                {
+                    editor.putFloat("minTension",Float.parseFloat(etTensionMin.getText().toString()));
+                    editor.putFloat("maxTension",Float.parseFloat(etTensionMax.getText().toString()));
+                }
+                if(swAmperage.isChecked())
+                {
+                    editor.putFloat("minAmperage",Float.parseFloat(etAmperageMin.getText().toString()));
+                    editor.putFloat("maxAmperage",Float.parseFloat(etAmperageMax.getText().toString()));
+                }
+
+                editor.apply();
+
+                SharedPreferences sharedPreferences = getSharedPreferences("notifications", MODE_PRIVATE);
+                Map<String, ?> allEntries = sharedPreferences.getAll();
+
+                for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+                    Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
+                }
+
+                Intent toHome = new Intent(getApplicationContext(),HomeActivity.class);
+                startActivity(toHome);
             }
         });
 
@@ -108,5 +152,38 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    public void populateEditText(){
+        //populates the editexts values with the ones that are stored in shared preferences. if none, put 0.0 for each
+        try{
+            sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+            etTemperatureMin.setText(String.valueOf(sharedPreferences.getFloat("minTemperature",0.0f)));
+            etTemperatureMax.setText(String.valueOf(sharedPreferences.getFloat("maxTemperature",0.0f)));
+            etPowerMin.setText(String.valueOf(sharedPreferences.getFloat("minPower",0.0f)));
+            etPowerMax.setText(String.valueOf(sharedPreferences.getFloat("maxPower",0.0f)));
+            etPowerFactorMin.setText(String.valueOf(sharedPreferences.getFloat("minPowerFactor",0.0f)));
+            etPowerFactorMax.setText(String.valueOf(sharedPreferences.getFloat("maxPowerFactor",0.0f)));
+            etTensionMin.setText(String.valueOf(sharedPreferences.getFloat("minTension",0.0f)));
+            etTensionMax.setText(String.valueOf(sharedPreferences.getFloat("maxTension",0.0f)));
+            etAmperageMin.setText(String.valueOf(sharedPreferences.getFloat("minAmperage",0.0f)));
+            etAmperageMax.setText(String.valueOf(sharedPreferences.getFloat("maxAmperage",0.0f)));
+
+            if (!etTemperatureMin.getText().toString().equals("0.0") || !etTemperatureMax.getText().toString().equals("0.0"))
+                swTemperature.setChecked(true);
+            if (!etPowerMin.getText().toString().equals("0.0") || !etPowerMax.getText().toString().equals("0.0"))
+                swPower.setChecked(true);
+            if (!etPowerFactorMin.getText().toString().equals("0.0") || !etPowerFactorMax.getText().toString().equals("0.0"))
+                swPowerFactor.setChecked(true);
+            if (!etTensionMin.getText().toString().equals("0.0") || !etTensionMax.getText().toString().equals("0.0"))
+                swTension.setChecked(true);
+            if (!etAmperageMin.getText().toString().equals("0.0") || !etAmperageMin.getText().toString().equals("0.0"))
+                swAmperage.setChecked(true);
+        }
+        catch (Error e)
+        {
+            e.printStackTrace();
+        }
+
     }
 }

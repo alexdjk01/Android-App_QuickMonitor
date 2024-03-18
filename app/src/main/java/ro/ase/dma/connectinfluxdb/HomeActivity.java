@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -72,6 +73,10 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     // default value is 1 to view engine no1
     private int currentEngineUI=2;
     public int graphInterval=9; //default shows ony 9 values
+
+    //shared preferecnes
+
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,6 +247,10 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             influxDBContinuousFetcher.stopFetchingData();
         }
     }
+
+
+
+
     public void graphPlotFunction(XYPlot plot, int lowerBoundry, int upperBoundry, ArrayList<String> domainLabels, Double[] seriesNumbers, int interval)
     {
         plot.clear();
@@ -433,9 +442,107 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         resultHistory.get(2).add(String.format("T%d, %s, %f",2,engineThree.getTemperatureTime(),engineThree.getTemperatureValue()));
     }
 
-    // func for update UI elements that will be called from dataChanged
 
-    // fara double parse la unele
+    public void sendEmailsAlert(Double temperatureValue, Double powerValue, Double PFValue, Double tensionValue, Double amperageValue, int engineNo )
+    {
+        int ok=0;
+        try{
+            sharedPreferences = getSharedPreferences("notifications",MODE_PRIVATE);
+            Double minTemperature = (double) sharedPreferences.getFloat("minTemperature",0.0f);
+            Double maxTemperature = (double) sharedPreferences.getFloat("maxTemperature",0.0f);
+            Double minPower = (double) sharedPreferences.getFloat("minPower",0.0f);
+            Double maxPower = (double) sharedPreferences.getFloat("maxPower",0.0f);
+            Double minPowerFactor = (double) sharedPreferences.getFloat("minPowerFactor",0.0f);
+            Double maxPowerFactor = (double) sharedPreferences.getFloat("maxPowerFactor",0.0f);
+            Double minTension = (double) sharedPreferences.getFloat("minTension",0.0f);
+            Double maxTension = (double) sharedPreferences.getFloat("maxTension",0.0f);
+            Double minAmperage = (double) sharedPreferences.getFloat("minAmperage",0.0f);
+            Double maxAmperage = (double) sharedPreferences.getFloat("maxAmperage",0.0f);
+
+            String alertMessage="";
+
+            if (temperatureValue < minTemperature)
+            {
+                alertMessage += String.format("The temperature of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minTemperature);
+                ok=1;
+            }
+            else if (temperatureValue > maxTemperature)
+            {
+                alertMessage += String.format("The temperature of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxTemperature);
+                ok=1;
+            }
+
+            if (powerValue < minPower)
+            {
+                alertMessage += String.format("The power (W) of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minPower);
+                ok=1;
+            }
+            else if (powerValue > maxPower)
+            {
+                alertMessage += String.format("The  power (W) of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxPower);
+                ok=1;
+            }
+
+
+            if (PFValue < minPowerFactor)
+            {
+                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minPowerFactor);
+                ok=1;
+            }
+
+            else if (PFValue > maxPowerFactor)
+            {
+                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxPowerFactor);
+                ok=1;
+            }
+
+
+            if (tensionValue < minTension)
+            {
+                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minTension);
+                ok=1;
+            }
+
+            else if (tensionValue > maxTension)
+            {
+                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxTension);
+                ok=1;
+            }
+
+
+            if (amperageValue < minAmperage)
+            {
+                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minAmperage);
+                ok=1;
+            }
+
+            else if (amperageValue > maxAmperage)
+            {
+                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxAmperage);
+                ok=1;
+            }
+
+
+            //flag - if anything exceeds only then we send a email!
+            if(ok == 1)
+            {
+                EmailCommunication emailCommunication = new EmailCommunication("ionelalexandru01@gmail.com","mfjhltkgndvfbksj","djkmata.djkmata@gmail.com");
+                emailCommunication.sendEmail(alertMessage);
+            }
+
+
+        }
+        catch(Error e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+
+    }
+
+    // func for update UI elements that will be called from dataChanged
     public void updateUI(ArrayList<ArrayList<String>> groupedEngines)
     {
         fetchLiveDataForEachEngine(groupedEngines);
@@ -448,6 +555,11 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         else
             engineAux = new Engine(engineThree);
 
+        //send emails
+        //!!!!!!!!
+        // Trimite prea DES emailuri!!!!
+        //------- trb trimis mai rar nuj cum vedem!
+        sendEmailsAlert(engineAux.getTemperatureValue(),engineAux.getPowerValue(),engineAux.getPowerFactorValue(),engineAux.getTensionValue(),engineAux.getAmperageValue(),currentEngineUI);
 
         //update UI progresses
         tvNumericalTemperature.setText(String.format("%.2f °C", engineAux.getTemperatureValue()));

@@ -68,9 +68,10 @@
             <EditText
                 android:id="@+id/etNotifyTempMin"
                 android:hint="MIN"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textColorHint="@color/grey_colorHint"
                 android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/white"
                 android:textSize="15dp"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content">
@@ -89,7 +90,8 @@
             <EditText
                 android:id="@+id/etNotifyTempMax"
                 android:hint="MAX"
-                android:inputType="number"
+                android:textColor="@color/white"
+                android:inputType="numberDecimal"
                 android:fontFamily="@font/poppinsmedium"
                 android:textSize="15dp"
                 android:textColorHint="@color/grey_colorHint"
@@ -130,7 +132,8 @@
             <EditText
                 android:id="@+id/etNotifyPowerMin"
                 android:hint="MIN"
-                android:inputType="number"
+                android:textColor="@color/white"
+                android:inputType="numberDecimal"
                 android:textColorHint="@color/grey_colorHint"
                 android:fontFamily="@font/poppinsmedium"
                 android:textSize="15dp"
@@ -151,7 +154,8 @@
             <EditText
                 android:id="@+id/etNotifyPowerMax"
                 android:hint="MAX"
-                android:inputType="number"
+                android:textColor="@color/white"
+                android:inputType="numberDecimal"
                 android:fontFamily="@font/poppinsmedium"
                 android:textSize="15dp"
                 android:textColorHint="@color/grey_colorHint"
@@ -192,7 +196,8 @@
             <EditText
                 android:id="@+id/etNotifyPFMin"
                 android:hint="MIN"
-                android:inputType="number"
+                android:textColor="@color/white"
+                android:inputType="numberDecimal"
                 android:textColorHint="@color/grey_colorHint"
                 android:fontFamily="@font/poppinsmedium"
                 android:textSize="15dp"
@@ -213,7 +218,8 @@
             <EditText
                 android:id="@+id/etNotifyPFMax"
                 android:hint="MAX"
-                android:inputType="number"
+                android:textColor="@color/white"
+                android:inputType="numberDecimal"
                 android:fontFamily="@font/poppinsmedium"
                 android:textSize="15dp"
                 android:textColorHint="@color/grey_colorHint"
@@ -253,7 +259,8 @@
             <EditText
                 android:id="@+id/etNotifyTensionMin"
                 android:hint="MIN"
-                android:inputType="number"
+                android:textColor="@color/white"
+                android:inputType="numberDecimal"
                 android:textColorHint="@color/grey_colorHint"
                 android:fontFamily="@font/poppinsmedium"
                 android:textSize="15dp"
@@ -274,7 +281,8 @@
             <EditText
                 android:id="@+id/etNotifyTensionMax"
                 android:hint="MAX"
-                android:inputType="number"
+                android:textColor="@color/white"
+                android:inputType="numberDecimal"
                 android:fontFamily="@font/poppinsmedium"
                 android:textSize="15dp"
                 android:textColorHint="@color/grey_colorHint"
@@ -315,7 +323,8 @@
             <EditText
                 android:id="@+id/etNotifyAmperageMin"
                 android:hint="MIN"
-                android:inputType="number"
+                android:textColor="@color/white"
+                android:inputType="numberDecimal"
                 android:textColorHint="@color/grey_colorHint"
                 android:fontFamily="@font/poppinsmedium"
                 android:textSize="15dp"
@@ -336,7 +345,8 @@
             <EditText
                 android:id="@+id/etNotifyAmperageMax"
                 android:hint="MAX"
-                android:inputType="number"
+                android:textColor="@color/white"
+                android:inputType="numberDecimal"
                 android:fontFamily="@font/poppinsmedium"
                 android:textSize="15dp"
                 android:textColorHint="@color/grey_colorHint"
