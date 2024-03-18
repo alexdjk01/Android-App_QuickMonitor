@@ -34,6 +34,9 @@ public class EmailCommunication {
         this.stringPasswordSenderEmail=senderPassword;
     }
 
+//    EmailCommunication emailCommunication = new EmailCommunication("ionelalexandru01@gmail.com","mfjhltkgndvfbksj","djkmata.djkmata@gmail.com");
+//    emailCommunication.sendEmail("Something");
+
     public void sendEmail(String text){
 
 
