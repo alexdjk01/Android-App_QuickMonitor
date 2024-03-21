@@ -19,6 +19,7 @@ public class Engine implements Parcelable {
     String amperageTime;       //I
     Double amperageValue;      //I
 
+
     public Engine(String temperatureTime, Double temperatureValue, String powerTime, Double powerValue, String powerFactorTime, Double powerFactorValue, String tensionTime, Double tensionValue, String amperageTime, Double amperageValue) {
         this.temperatureTime = temperatureTime;
         this.temperatureValue = temperatureValue;

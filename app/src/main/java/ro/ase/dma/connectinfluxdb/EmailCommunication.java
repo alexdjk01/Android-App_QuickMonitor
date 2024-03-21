@@ -34,9 +34,6 @@ public class EmailCommunication {
         this.stringPasswordSenderEmail=senderPassword;
     }
 
-//    EmailCommunication emailCommunication = new EmailCommunication("ionelalexandru01@gmail.com","mfjhltkgndvfbksj","djkmata.djkmata@gmail.com");
-//    emailCommunication.sendEmail("Something");
-
     public void sendEmail(String text){
 
 
@@ -68,7 +65,7 @@ public class EmailCommunication {
                 }
             });
 
-            session.setDebug(true);
+            //session.setDebug(true);
 
             MimeMessage mimeMessage = new MimeMessage(session);
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(stringReceiverEmail));
@@ -96,6 +93,9 @@ public class EmailCommunication {
 
 
     }
+
+
+
 
     public String getSenderPassword() {
         return stringPasswordSenderEmail;

@@ -52,6 +52,10 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     Engine engineTwo;
     Engine engineThree;
 
+    String engineOneAlertsSent =" ";
+    String engineTwoAlertsSent =" ";
+    String engineThreeAlertsSent =" ";
+
     private Button btnEngine1;
     private Button btnEngine2;
     private Button btnEngine3;
@@ -70,12 +74,11 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
 
     // global variable tht will keep track of which engine should be displayed!
-    // default value is 1 to view engine no1
+    // default value is 2 to view engine no3
     private int currentEngineUI=2;
     public int graphInterval=9; //default shows ony 9 values
 
     //shared preferecnes
-
     SharedPreferences sharedPreferences;
 
     @Override
@@ -443,7 +446,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     }
 
 
-    public void sendEmailsAlert(Double temperatureValue, Double powerValue, Double PFValue, Double tensionValue, Double amperageValue, int engineNo )
+    // sends emails to the email address logged regarding measurements that exceed or are below the limits set in settings
+    public String sendEmailsAlert(Engine engine, int engineNo, String engineAlerts )
     {
         int ok=0;
         try{
@@ -461,68 +465,66 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
             String alertMessage="";
 
-            if (temperatureValue < minTemperature)
+            if (engine.getTemperatureValue() < minTemperature && !engineAlerts.contains("minTemp"))
             {
+                engineAlerts = engineAlerts + "minTemp" + " ";
                 alertMessage += String.format("The temperature of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minTemperature);
                 ok=1;
             }
-            else if (temperatureValue > maxTemperature)
+            else if (engine.getTemperatureValue() > maxTemperature  && !engineAlerts.contains("maxTemp"))
             {
+                engineAlerts = engineAlerts + "maxTemp" + " ";
                 alertMessage += String.format("The temperature of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxTemperature);
                 ok=1;
             }
-
-            if (powerValue < minPower)
+            if (engine.getPowerValue() < minPower  && !engineAlerts.contains("minPower"))
             {
+                engineAlerts = engineAlerts + "minPower" + " ";
                 alertMessage += String.format("The power (W) of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minPower);
                 ok=1;
             }
-            else if (powerValue > maxPower)
+            else if (engine.getPowerValue() > maxPower && !engineAlerts.contains("maxPower"))
             {
+                engineAlerts = engineAlerts + "maxPower" + " ";
                 alertMessage += String.format("The  power (W) of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxPower);
                 ok=1;
             }
-
-
-            if (PFValue < minPowerFactor)
+            if (engine.getPowerFactorValue() < minPowerFactor && !engineAlerts.contains("minPowerFactor"))
             {
-                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minPowerFactor);
+                engineAlerts = engineAlerts + "minPowerFactor" + " ";
+                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f W minimum threshold! \n", engineNo,minPowerFactor);
                 ok=1;
             }
-
-            else if (PFValue > maxPowerFactor)
+            else if (engine.getPowerFactorValue() > maxPowerFactor && !engineAlerts.contains("maxPowerFactor"))
             {
-                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxPowerFactor);
+                engineAlerts = engineAlerts + "maxPowerFactor" + " ";
+                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f W maximum threshold! \n", engineNo,maxPowerFactor);
                 ok=1;
             }
-
-
-            if (tensionValue < minTension)
+            if (engine.getTensionValue() < minTension && !engineAlerts.contains("minTension"))
             {
-                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minTension);
+                engineAlerts = engineAlerts + "minTension" + " ";
+                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f V minimum threshold! \n", engineNo,minTension);
                 ok=1;
             }
-
-            else if (tensionValue > maxTension)
+            else if (engine.getTensionValue() > maxTension && !engineAlerts.contains("maxTension"))
             {
-                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxTension);
+                engineAlerts = engineAlerts + "maxTension" + " ";
+                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f V maximum threshold! \n", engineNo,maxTension);
                 ok=1;
             }
-
-
-            if (amperageValue < minAmperage)
+            if (engine.getAmperageValue() < minAmperage && !engineAlerts.contains("minAmperage"))
             {
-                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minAmperage);
+                engineAlerts = engineAlerts + "minAmperage" + " ";
+                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f A minimum threshold! \n", engineNo,minAmperage);
                 ok=1;
             }
-
-            else if (amperageValue > maxAmperage)
+            else if (engine.getAmperageValue() > maxAmperage && !engineAlerts.contains("maxAmperage"))
             {
-                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxAmperage);
+                engineAlerts = engineAlerts + "maxAmperage" + " ";
+                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f A maximum threshold! \n", engineNo,maxAmperage);
                 ok=1;
             }
-
-
             //flag - if anything exceeds only then we send a email!
             if(ok == 1)
             {
@@ -530,17 +532,14 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 emailCommunication.sendEmail(alertMessage);
             }
 
-
         }
         catch(Error e)
         {
             e.printStackTrace();
         }
-
-
-
-
+        return engineAlerts;
     }
+
 
     // func for update UI elements that will be called from dataChanged
     public void updateUI(ArrayList<ArrayList<String>> groupedEngines)
@@ -559,7 +558,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         //!!!!!!!!
         // Trimite prea DES emailuri!!!!
         //------- trb trimis mai rar nuj cum vedem!
-        sendEmailsAlert(engineAux.getTemperatureValue(),engineAux.getPowerValue(),engineAux.getPowerFactorValue(),engineAux.getTensionValue(),engineAux.getAmperageValue(),currentEngineUI);
+        //sendEmailsAlert(engineAux.getTemperatureValue(),engineAux.getPowerValue(),engineAux.getPowerFactorValue(),engineAux.getTensionValue(),engineAux.getAmperageValue(),currentEngineUI);
 
         //update UI progresses
         tvNumericalTemperature.setText(String.format("%.2f °C", engineAux.getTemperatureValue()));
@@ -604,8 +603,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
     }
 
-
-    //save direclty double not String
+    //-------------------
     public void fetchLiveDataForEachEngine(ArrayList<ArrayList<String>> groupedEngines)
     {
         for( int engineNumber=0; engineNumber < groupedEngines.size(); engineNumber++)
@@ -620,10 +618,10 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             //get rid of the [ in the begining and ] at the end in order to get unaltered values
             String editedData = allData.substring(1,allData.length()-1);
 
-            //devide the string in order to get the exact values for each measurement
+            //divide the string in order to get the exact values for each measurement
             String divideData[] = editedData.split(",\\s*") ;// in ordet to split by , and space
 
-            // Create 5 atributes for each measurement of an engine
+            // Create 5 attributes for each measurement of an engine
             String temperatureTime = divideData[1];     //T
             Double temperatureValue = Double.parseDouble(divideData[2]) ;    //T
             String powerTime = divideData[4];           //P
@@ -638,14 +636,17 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             if(engineNumber == 0)
             {
                 engineOne = new Engine(temperatureTime,temperatureValue,powerTime,powerValue,powerFactorTime,powerFactorValue,tensionTime,tensionValue,amperageTime,amperageValue);
+                engineOneAlertsSent=sendEmailsAlert(engineOne,1, engineOneAlertsSent);
             }
             else if(engineNumber == 1)
             {
                 engineTwo = new Engine(temperatureTime,temperatureValue,powerTime,powerValue,powerFactorTime,powerFactorValue,tensionTime,tensionValue,amperageTime,amperageValue);
+                engineTwoAlertsSent=sendEmailsAlert(engineTwo,2, engineTwoAlertsSent);
             }
             else if(engineNumber ==2)
             {
                 engineThree = new Engine(temperatureTime,temperatureValue,powerTime,powerValue,powerFactorTime,powerFactorValue,tensionTime,tensionValue,amperageTime,amperageValue);
+                engineThreeAlertsSent=sendEmailsAlert(engineThree,3, engineThreeAlertsSent);
             }
 
 
