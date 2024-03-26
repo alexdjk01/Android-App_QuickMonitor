@@ -77,6 +77,16 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     private XYPlot graphPlotPower;
     private Spinner spinnerTimePower;
 
+    //graph and drop down button for TENSION graph
+    private XYPlot graphPlotTension;
+    private Spinner spinnerTimeTension;
+
+    //graph and drop down button for AMPERAGE graph
+    private XYPlot graphPlotAmperage;
+    private Spinner spinnerTimeAmperage;
+
+
+
 
 
     // global variable tht will keep track of which engine should be displayed!
@@ -112,6 +122,11 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         graphPlotPower = findViewById(R.id.graphPlotPower);
         spinnerTimePower = findViewById(R.id.spinnerTimePower);
 
+        graphPlotTension = findViewById(R.id.graphPlotTension);
+        spinnerTimeTension = findViewById(R.id.spinnerTimeTension);
+
+        graphPlotAmperage = findViewById(R.id.graphPlotAmpergae);
+        spinnerTimeAmperage = findViewById(R.id.spinnerTimeAmperage);
 
         bottomNavigation = findViewById(R.id.navigationMenuBar);
 
@@ -133,6 +148,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 currentEngineUI=0;
                 populateGraphHistory(graphPlotTemperature,0,40,0,graphInterval[0],"Temperature",4,1); //default: show only the last 9 values taken in the grap
                 populateGraphHistory(graphPlotPower,0,100,3,graphInterval[1],"Power", 20F,1); //default: show only the last 9 values taken in the graph
+                populateGraphHistory(graphPlotTension,0,500,9,graphInterval[2],"Tension",40F,1);
+                populateGraphHistory(graphPlotAmperage,0,1,12,graphInterval[3],"Amperage", 0.1F,1);
                 updateUI(groupedEngines);
             }
         });
@@ -146,6 +163,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 currentEngineUI=1;
                 populateGraphHistory(graphPlotTemperature,0,40,1,graphInterval[0],"Temperature",4,1);
                 populateGraphHistory(graphPlotPower,0,100,4,graphInterval[1],"Power",20F,1);
+                populateGraphHistory(graphPlotTension,0,500,10,graphInterval[2],"Tension",40F,1);
+                populateGraphHistory(graphPlotAmperage,0,1,13,graphInterval[3],"Amperage", 0.1F,1);
                 updateUI(groupedEngines);
             }
         });
@@ -160,6 +179,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 //Log.w("Check restulH", String.valueOf(resultHistory.get(2)));
                 populateGraphHistory(graphPlotTemperature,0,40,2,graphInterval[0],"Temperature",4,1);
                 populateGraphHistory(graphPlotPower,0,200,5,graphInterval[1],"Power",20F,1);
+                populateGraphHistory(graphPlotTension,0,500,11,graphInterval[2],"Tension",40F,1);
+                populateGraphHistory(graphPlotAmperage,0,1,14,graphInterval[3],"Amperage", 0.1F,1);
                 updateUI(groupedEngines);
             }
         });
@@ -260,6 +281,95 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                         graphInterval[1]=7200;
                         populateGraphHistory(graphPlotPower,0,200,currentEngineUI+3,graphInterval[1],"Power",20F,1);
                     }
+                }
+                else
+                {
+                    Log.w("resultHistoryEmpty", resultHistory.toString());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinnerTimeTension.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                String clickedInterval = adapterView.getItemAtPosition(pos).toString();
+                if(!resultHistory.isEmpty())
+                {
+                    if(clickedInterval.equals("1m")){
+                        graphInterval[2]=5;
+                        populateGraphHistory(graphPlotTension,0,500,currentEngineUI+9,graphInterval[2],"Tension",40F,1);                    }
+                    else if (clickedInterval.equals("2m")){
+                        graphInterval[2]=10;
+                        populateGraphHistory(graphPlotTension,0,500,currentEngineUI+9,graphInterval[2],"Tension",40F,1);                    }
+                    else if (clickedInterval.equals("3m")){
+                        graphInterval[2]=15;
+                        populateGraphHistory(graphPlotTension,0,500,currentEngineUI+9,graphInterval[2],"Tension",40F,1);
+                    }
+                    else if (clickedInterval.equals("10m")){
+                        graphInterval[2]=50;
+                        populateGraphHistory(graphPlotTension,0,500,currentEngineUI+9,graphInterval[2],"Tension",40F,1);
+                    }
+                    else if (clickedInterval.equals("30m")){
+                        graphInterval[2]=150;
+                        populateGraphHistory(graphPlotTension,0,500,currentEngineUI+9,graphInterval[2],"Tension",40F,1);                    }
+                    else if (clickedInterval.equals("1h")){
+                        graphInterval[2]=300;
+                        populateGraphHistory(graphPlotTension,0,500,currentEngineUI+9,graphInterval[2],"Tension",40F,1);                    }
+                    else if (clickedInterval.equals("3h")){
+                        graphInterval[2]=900;
+                        populateGraphHistory(graphPlotTension,0,500,currentEngineUI+9,graphInterval[2],"Tension",40F,1);                    }
+                    else if (clickedInterval.equals("24h")){
+                        graphInterval[2]=7200;
+                        populateGraphHistory(graphPlotTension,0,500,currentEngineUI+9,graphInterval[2],"Tension",40F,1);                    }
+                }
+                else
+                {
+                    Log.w("resultHistoryEmpty", resultHistory.toString());
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinnerTimeAmperage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                String clickedInterval = adapterView.getItemAtPosition(pos).toString();
+                if(!resultHistory.isEmpty())
+                {
+                    if(clickedInterval.equals("1m")){
+                        graphInterval[3]=5;
+                        populateGraphHistory(graphPlotAmperage,0,1,currentEngineUI+12,graphInterval[3],"Amperage", 0.1F,1);                    }
+                    else if (clickedInterval.equals("2m")){
+                        graphInterval[3]=10;
+                        populateGraphHistory(graphPlotAmperage,0,1,currentEngineUI+12,graphInterval[3],"Amperage", 0.1F,1);                    }
+                    else if (clickedInterval.equals("3m")){
+                        graphInterval[3]=15;
+                        populateGraphHistory(graphPlotAmperage,0,1,currentEngineUI+12,graphInterval[3],"Amperage", 0.1F,1);
+                    }
+                    else if (clickedInterval.equals("10m")){
+                        graphInterval[3]=50;
+                        populateGraphHistory(graphPlotAmperage,0,1,currentEngineUI+12,graphInterval[3],"Amperage", 0.1F,1);
+                    }
+                    else if (clickedInterval.equals("30m")){
+                        graphInterval[3]=150;
+                        populateGraphHistory(graphPlotAmperage,0,1,currentEngineUI+12,graphInterval[3],"Amperage", 0.1F,1);                    }
+                    else if (clickedInterval.equals("1h")){
+                        graphInterval[3]=300;
+                        populateGraphHistory(graphPlotAmperage,0,1,currentEngineUI+12,graphInterval[3],"Amperage", 0.1F,1);                    }
+                    else if (clickedInterval.equals("3h")){
+                        graphInterval[3]=900;
+                        populateGraphHistory(graphPlotAmperage,0,1,currentEngineUI+12,graphInterval[3],"Amperage", 0.1F,1);                    }
+                    else if (clickedInterval.equals("24h")){
+                        graphInterval[3]=7200;
+                        populateGraphHistory(graphPlotAmperage,0,1,currentEngineUI+12,graphInterval[3],"Amperage", 0.1F,1);                    }
                 }
                 else
                 {
@@ -753,6 +863,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
         populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval[0],"Temperature",4,1);
         populateGraphHistory(graphPlotPower,0,200,currentEngineUI+3,graphInterval[1],"Power",20F,1);
+        populateGraphHistory(graphPlotTension,0,500,currentEngineUI+9,graphInterval[2],"Tension",40F,1);
+        populateGraphHistory(graphPlotAmperage,0,1,currentEngineUI+12,graphInterval[3],"Amperage", 0.1F,1);
 
     }
 
