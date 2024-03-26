@@ -213,6 +213,42 @@
 
                 />
 
+            <com.androidplot.xy.XYPlot
+                android:id="@+id/graphPlotPower"
+                style="@style/APDefacto.Dark"
+                app:backgroundColor="@color/dark_blue_background"
+                android:layout_width="330dp"
+                ap:graphBackgroundColor = "@color/dark_blue_background"
+                ap:gridBackgroundColor="@color/dark_blue_background"
+                ap:domainLineColor = "@color/dark_blue_background"
+                ap:rangeLineColor = "@color/dark_blue_background"
+                ap:lineLabelTextSizeBottom ="10dp"
+                ap:lineLabelTextColorBottom = "@color/green_avocado"
+                ap:lineLabelTextColorLeft = "@color/green_avocado"
+                ap:domainOriginLineColor = "@color/green_avocado"
+                ap:rangeOriginLineColor = "@color/green_avocado"
+                android:layout_height="300dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="340dp"
+
+
+                >
+                <!--  domainLine is the column line and range is the rowLine -->
+                <!--  lineLabelTextColorLeft is the left and the other is bottom -->
+
+            </com.androidplot.xy.XYPlot>
+
+            <Spinner
+                android:id="@+id/spinnerTimePower"
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="-340dp"
+                android:layout_marginLeft="275dp"
+                android:background="@drawable/time_interval_spinner"
+
+                />
+
 
         </LinearLayout>
 
