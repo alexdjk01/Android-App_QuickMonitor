@@ -22,8 +22,8 @@ public class User implements Parcelable {
     long userId;
     @ColumnInfo(name="userEmail")
     String email ;
-    @ColumnInfo(name="userPassword")
-    String password;
+    @ColumnInfo(name="userURL")
+    String URL;
     @ColumnInfo(name="userEngineSeries")
     String engineSeries;
 
@@ -33,24 +33,24 @@ public class User implements Parcelable {
 
     }
 
-    public User(long userId, String email, String password, String engineSeries) {
+    public User(long userId, String email, String URL, String engineSeries) {
         this.userId = userId;
         this.email = email;
-        this.password = password;
+        this.URL = URL;
         this.engineSeries = engineSeries;
     }
 
     @Ignore
-    public User( String email, String password, String engineSeries) {
+    public User( String email, String URL, String engineSeries) {
         this.email = email;
-        this.password = password;
+        this.URL = URL;
         this.engineSeries = engineSeries;
     }
 
     protected User(Parcel in) {
         userId = in.readLong();
         email = in.readString();
-        password = in.readString();
+        URL = in.readString();
         engineSeries = in.readString();
     }
 
@@ -75,7 +75,7 @@ public class User implements Parcelable {
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeLong(userId);
         parcel.writeString(email);
-        parcel.writeString(password);
+        parcel.writeString(URL);
         parcel.writeString(engineSeries);
     }
 
@@ -84,7 +84,7 @@ public class User implements Parcelable {
         return "User{" +
                 "userId=" + userId +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", URL='" + URL + '\'' +
                 ", engineSeries='" + engineSeries + '\'' +
                 '}';
     }
@@ -94,12 +94,12 @@ public class User implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userId == user.userId && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(engineSeries, user.engineSeries);
+        return userId == user.userId && Objects.equals(email, user.email) && Objects.equals(URL, user.URL) && Objects.equals(engineSeries, user.engineSeries);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, email, password, engineSeries);
+        return Objects.hash(userId, email, URL, engineSeries);
     }
 
     public long getUserId() {
@@ -118,12 +118,12 @@ public class User implements Parcelable {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getURL() {
+        return URL;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setURL(String password) {
+        this.URL = password;
     }
 
     public String getEngineSeries() {

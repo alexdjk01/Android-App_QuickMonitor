@@ -480,13 +480,13 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             if (engine.getPowerValue() < minPower  && !engineAlerts.contains("minPower"))
             {
                 engineAlerts = engineAlerts + "minPower" + " ";
-                alertMessage += String.format("The power (W) of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minPower);
+                alertMessage += String.format("The power (W) of engine number %d is BELOW %.2f W minimum threshold! \n", engineNo,minPower);
                 ok=1;
             }
             else if (engine.getPowerValue() > maxPower && !engineAlerts.contains("maxPower"))
             {
                 engineAlerts = engineAlerts + "maxPower" + " ";
-                alertMessage += String.format("The  power (W) of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxPower);
+                alertMessage += String.format("The  power (W) of engine number %d is ABOVE %.2f W maximum threshold! \n", engineNo,maxPower);
                 ok=1;
             }
             if (engine.getPowerFactorValue() < minPowerFactor && !engineAlerts.contains("minPowerFactor"))

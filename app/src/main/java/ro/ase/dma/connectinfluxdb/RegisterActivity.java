@@ -18,8 +18,8 @@ public class RegisterActivity extends AppCompatActivity {
     private UserDao userDao;
     private Button btnSignup;
     private EditText etEmail;
-    private EditText etPassword;
-    private EditText etPasswordVerify;
+    private EditText etURL;
+    private EditText etURLVerify;
     private TextView tvAlertEmail;
     private TextView tvAlertPassword;
     private TextView tvLogin;
@@ -31,8 +31,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         btnSignup  = findViewById(R.id.btnSignup);
         etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        etPasswordVerify = findViewById(R.id.etPasswordVerify);
+        etURL = findViewById(R.id.etURL);
+        etURLVerify = findViewById(R.id.etURLVerify);
         tvAlertEmail = findViewById(R.id.tvAlertEmail);
         tvAlertPassword = findViewById(R.id.tvAlertPassword);
         tvLogin = findViewById(R.id.tvLogin);
@@ -56,8 +56,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
-                String passwordVerify = etPasswordVerify.getText().toString();
+                String password = etURL.getText().toString();
+                String passwordVerify = etURLVerify.getText().toString();
 
                 if(verifyCredentials(email,password,passwordVerify))
                 {
@@ -94,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private Boolean verifyCredentials(String email, String password, String passwordVerify){
+    private Boolean verifyCredentials(String email, String URL, String URLVerify){
 
         String passwordRegex = "^(?=.*[A-Z])(?=.*[0-9]).+$"; // ^/$ start and end of regex string
         //  (?=.*[A-Z]) checks if an uppercase letter is present in the password input
@@ -105,9 +105,9 @@ public class RegisterActivity extends AppCompatActivity {
             tvAlertEmail.setText("Email format: joedoe@email.com");
             return false;
         }
-        else if ( password.isEmpty() || passwordVerify.isEmpty() || !(password.matches(passwordRegex)) || !(passwordVerify.equals(password)) || !(password.length()>6))
+        else if ( URL.isEmpty() || URLVerify.isEmpty() || !(URL.length()>6))
         {
-            tvAlertPassword.setText("Must contain: a-z/A-Z/0-9");
+            tvAlertPassword.setText("URL Wrong! Try again!");
             tvAlertEmail.setText("");
             return false;
         }

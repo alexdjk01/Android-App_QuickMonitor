@@ -60,11 +60,11 @@
         android:text="" />
 
     <TextView
-        android:id="@+id/tvPasswordLogin"
+        android:id="@+id/tvURLLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="Password"
+        android:text="URL"
         android:fontFamily="@font/poppinsmedium"
         android:textColor="@color/white"
         android:textSize="16dp"
@@ -72,18 +72,18 @@
         android:layout_marginLeft="30dp"/>
 
     <EditText
-        android:id="@+id/etPassword"
+        android:id="@+id/etURL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:backgroundTint="@color/blue_ediText"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColor="@color/white"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/edit_text"
         android:textColorHint="#757272"
-        android:hint="Enter your password                          0/7" />
+        android:hint="Enter your connection URL" />
 
     <TextView
         android:id="@+id/tvAlertPassword"
@@ -96,11 +96,11 @@
 
 
     <TextView
-        android:id="@+id/tvPasswordVerifyRegister"
+        android:id="@+id/tvURLVerifyRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="Retype Password"
+        android:text="Retype URL"
         android:fontFamily="@font/poppinsmedium"
         android:textColor="@color/white"
         android:textSize="16dp"
@@ -108,18 +108,18 @@
         android:layout_marginLeft="30dp"/>
 
     <EditText
-        android:id="@+id/etPasswordVerify"
+        android:id="@+id/etURLVerify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:backgroundTint="@color/blue_ediText"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColor="@color/white"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/edit_text"
         android:textColorHint="#757272"
-        android:hint="Enter your password again                0/7" />
+        android:hint="Enter your URL again" />
 
 
     <Button

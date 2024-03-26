@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,10 +25,10 @@ import com.google.android.material.navigation.NavigationBarView;
 public class ProfileActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigation;
     private EditText etEmail;
-    private EditText etPassword;
+    private EditText etURL;
 
     private ImageView ivEditEmail;
-    private ImageView ivEditPassword;
+    private ImageView ivEditURL;
 
     private Button btnSave;
     private Button btnLogout;
@@ -47,9 +46,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         bottomNavigation = findViewById(R.id.navigationMenuBar);
         etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
+        etURL = findViewById(R.id.etURL);
         ivEditEmail = findViewById(R.id.ivEditEmail);
-        ivEditPassword = findViewById(R.id.ivEditPassword);
+        ivEditURL = findViewById(R.id.ivEditURL);
 
         userDatabase = UserRoomDataBase.getInstance(this);
         userDao = userDatabase.getUserDao();
@@ -73,10 +72,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
         // auto complete the editexts with the values of the logged user
         etEmail.setText(receivedUserHome.email.toString());
-        etPassword.setText((receivedUserHome.password.toString()));
+        etURL.setText((receivedUserHome.URL.toString()));
         //set the property of writing the imput to galse in order not to edit it by mistake, the user shoud press the edit icon to edit
         etEmail.setEnabled(false);
-        etPassword.setEnabled(false);
+        etURL.setEnabled(false);
 
         //edit the email
         ivEditEmail.setOnClickListener(new View.OnClickListener() {
@@ -103,11 +102,11 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         //edit the password
-        ivEditPassword.setOnClickListener(new View.OnClickListener() {
+        ivEditURL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                etPassword.setEnabled(true);
-                etPassword.addTextChangedListener(new TextWatcher() {
+                etURL.setEnabled(true);
+                etURL.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                         //nothing
@@ -118,7 +117,7 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                     @Override
                     public void afterTextChanged(Editable editable) {
-                        receivedUserHome.setPassword(editable.toString());
+                        receivedUserHome.setURL(editable.toString());
                         Log.e(" User EDITED: ", receivedUserHome.toString());
                     }
                 });

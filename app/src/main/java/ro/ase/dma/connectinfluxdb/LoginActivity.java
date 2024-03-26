@@ -16,18 +16,16 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 
-import java.util.List;
-
 public class LoginActivity extends AppCompatActivity {
 
     private Button btnLogin;
     private EditText etEmail;
-    private EditText etPassword;
+    private EditText etURL;
     private TextView tvSignUp;
     private UserRoomDataBase userDatabase;
     private UserDao userDao;
     private TextView tvAlertEmail;
-    private TextView tvAlertPassword;
+    private TextView tvAlertURL;
 
 
 
@@ -50,10 +48,10 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin = findViewById(R.id.btnLogin);
         etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
+        etURL = findViewById(R.id.etURL);
         tvSignUp = findViewById(R.id.tvSignUp);
         tvAlertEmail = findViewById(R.id.tvAlertEmail);
-        tvAlertPassword = findViewById(R.id.tvAlertPassword);
+        tvAlertURL = findViewById(R.id.tvAlertURL);
 
         userDatabase = UserRoomDataBase.getInstance(this);
         userDao = userDatabase.getUserDao();
@@ -80,9 +78,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
+                String URL = etURL.getText().toString();
                 //check if the credentials are saved in the database
-                if(verifyCredentials(email,password))   // if the email and password are written properly
+                if(verifyCredentials(email,URL))   // if the email and password are written properly
                 {
                     if(userDao.getUserByEmail(email) != null)   // if the user exists in the database
                     {
@@ -129,9 +127,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private Boolean verifyCredentials(String email, String password){
+    private Boolean verifyCredentials(String email, String url){
 
-        String passwordRegex = "^(?=.*[A-Z])(?=.*[0-9]).+$"; // ^/$ start and end of regex string
+        //String passwordRegex = "^(?=.*[A-Z])(?=.*[0-9]).+$"; // ^/$ start and end of regex string
         //  (?=.*[A-Z]) checks if an uppercase letter is present in the password input
         //  (?=.*[0-9]) checks if a number is present in the password input
         //so if the email does not match email format or the password does not contain uppercase and number or the length is smaller than 7 it will return false
@@ -140,9 +138,9 @@ public class LoginActivity extends AppCompatActivity {
             tvAlertEmail.setText("Email format: joedoe@email.com");
             return false;
         }
-        else if(password.isEmpty() || !(password.matches(passwordRegex))  || !(password.length()>6))
+        else if(url.isEmpty() ||  !(url.length()>6))
         {
-            tvAlertPassword.setText("Must contain: a-z/A-Z/0-9 and length>7");
+            tvAlertURL.setText("URL Wrong! Try again!");
             tvAlertEmail.setText("");
             return false;
         }
@@ -165,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         User newUser = intent.getParcelableExtra("keyRegister");
         if(newUser != null) {
             etEmail.setText(newUser.email.toString());
-            etPassword.setText(newUser.password.toString());
+            etURL.setText(newUser.URL.toString());
         }
     }
 }
