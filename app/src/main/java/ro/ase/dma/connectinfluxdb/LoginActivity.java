@@ -3,6 +3,7 @@ package ro.ase.dma.connectinfluxdb;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     private UserDao userDao;
     private TextView tvAlertEmail;
     private TextView tvAlertURL;
+
+    public SharedPreferences sharedPreferences;
 
 
 
@@ -82,6 +85,14 @@ public class LoginActivity extends AppCompatActivity {
                 //check if the credentials are saved in the database
                 if(verifyCredentials(email,URL))   // if the email and password are written properly
                 {
+                    // save the email and password in a shared preference resource in order to dinamically change the IP and receiver email
+                    sharedPreferences = getSharedPreferences("loginData",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear();
+                    editor.putString("email",email);
+                    editor.putString("URL",URL);
+                    editor.commit();
+
                     if(userDao.getUserByEmail(email) != null)   // if the user exists in the database
                     {
 
@@ -94,7 +105,8 @@ public class LoginActivity extends AppCompatActivity {
                                 if(loggedUser!= null)
                                 {
                                     Log.w("USERRRRRR", loggedUser.toString());
-
+                                    loggedUser.setURL(URL);
+                                    userDao.update(loggedUser);
                                     // need to lunch the main dashboard
                                     runOnUiThread(new Runnable() {      // get back on the main thread to start a new activity
                                         @Override
@@ -129,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Boolean verifyCredentials(String email, String url){
 
+        String IPregex = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(:\\d{1,5})?$";
         //String passwordRegex = "^(?=.*[A-Z])(?=.*[0-9]).+$"; // ^/$ start and end of regex string
         //  (?=.*[A-Z]) checks if an uppercase letter is present in the password input
         //  (?=.*[0-9]) checks if a number is present in the password input
@@ -138,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
             tvAlertEmail.setText("Email format: joedoe@email.com");
             return false;
         }
-        else if(url.isEmpty() ||  !(url.length()>6))
+        else if(url.isEmpty() ||  !(url.length()>6) || !url.matches(IPregex))
         {
             tvAlertURL.setText("URL Wrong! Try again!");
             tvAlertEmail.setText("");

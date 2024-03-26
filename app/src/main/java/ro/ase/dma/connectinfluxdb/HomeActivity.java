@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ import java.util.Arrays;
 public class HomeActivity extends AppCompatActivity implements DataUpdateCallback {
     private BottomNavigationView bottomNavigation;
     private User receivedUserLogged = null;
-    private InfluxDBContinuousFetcher influxDBContinuousFetcher= new InfluxDBContinuousFetcher();
+    private InfluxDBContinuousFetcher influxDBContinuousFetcher= new InfluxDBContinuousFetcher(this);
 
     ArrayList<ArrayList<String>> groupedEngines = new ArrayList<>();
     ArrayList<ArrayList<String>> resultHistory = new ArrayList<>();
@@ -528,7 +529,9 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             //flag - if anything exceeds only then we send a email!
             if(ok == 1)
             {
-                EmailCommunication emailCommunication = new EmailCommunication("ionelalexandru01@gmail.com","mfjhltkgndvfbksj","djkmata.djkmata@gmail.com");
+                sharedPreferences = getSharedPreferences("loginData", MODE_PRIVATE);
+                String receiverEmail = sharedPreferences.getString("email","djkmata.djkmata@gmail.com");
+                EmailCommunication emailCommunication = new EmailCommunication("ionelalexandru01@gmail.com","mfjhltkgndvfbksj",receiverEmail);
                 emailCommunication.sendEmail(alertMessage);
             }
 
@@ -554,19 +557,12 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         else
             engineAux = new Engine(engineThree);
 
-        //send emails
-        //!!!!!!!!
-        // Trimite prea DES emailuri!!!!
-        //------- trb trimis mai rar nuj cum vedem!
-        //sendEmailsAlert(engineAux.getTemperatureValue(),engineAux.getPowerValue(),engineAux.getPowerFactorValue(),engineAux.getTensionValue(),engineAux.getAmperageValue(),currentEngineUI);
-
         //update UI progresses
         tvNumericalTemperature.setText(String.format("%.2f °C", engineAux.getTemperatureValue()));
         if(engineAux.getTemperatureValue() > 31)
             tvNumericalTemperature.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
         else
             tvNumericalTemperature.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
-
 
 
         pbPower.setMinMax(0,300);   //Wattage interval from 0 to 300;
