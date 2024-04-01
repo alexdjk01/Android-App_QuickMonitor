@@ -191,6 +191,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinnerTimeTemperature.setAdapter(adapter);
         spinnerTimePower.setAdapter(adapter);
+        spinnerTimeTension.setAdapter(adapter);
+        spinnerTimeAmperage.setAdapter(adapter);
 
        spinnerTimeTemperature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
            @Override
