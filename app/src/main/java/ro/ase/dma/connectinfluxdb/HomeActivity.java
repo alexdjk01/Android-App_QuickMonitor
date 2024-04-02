@@ -62,6 +62,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     private Button btnEngine2;
     private Button btnEngine3;
 
+    private Button btnExportMail;
+
     private TextView tvNumericalTemperature;
 
     private SemiCircularProgressBar pbPower;
@@ -111,6 +113,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         btnEngine1 = findViewById(R.id.btnEngine1);
         btnEngine2 = findViewById(R.id.btnEngine2);
         btnEngine3 = findViewById(R.id.btnEngine3);
+        btnExportMail = findViewById(R.id.btnExportMail);
+
         tvNumericalTemperature = findViewById(R.id.tvNumericalTemperature);
         pbPower = findViewById(R.id.pbPower);
         pbPowerFactor = findViewById(R.id.pbPowerFactor);
@@ -128,6 +132,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
         graphPlotAmperage = findViewById(R.id.graphPlotAmpergae);
         spinnerTimeAmperage = findViewById(R.id.spinnerTimeAmperage);
+
+
 
         bottomNavigation = findViewById(R.id.navigationMenuBar);
 
@@ -183,6 +189,13 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 populateGraphHistory(graphPlotTension,0,500,11,graphInterval[2],"Tension",40F,1);
                 populateGraphHistory(graphPlotAmperage,0,1,14,graphInterval[3],"Amperage", 0.1F,1);
                 updateUI(groupedEngines);
+            }
+        });
+
+        btnExportMail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendEmailsExportHistory(resultHistory);
             }
         });
 
@@ -719,6 +732,90 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         resultHistory.get(14).add(String.format("I_%d, %s, %f",2,engineThree.getAmperageTime(),engineThree.getAmperageValue()));
     }
 
+    public void sendEmailsExportHistory(ArrayList<ArrayList<String>> resultHistory)
+    {
+        ArrayList<String> arrayTimeTemperature = new ArrayList<>();
+        ArrayList<String> arrayValueTemperature= new ArrayList<>();
+        ArrayList<String> arrayTimePower = new ArrayList<>();
+        ArrayList<String> arrayValuePower= new ArrayList<>();
+        ArrayList<String> arrayTimePF = new ArrayList<>();
+        ArrayList<String> arrayValuePF= new ArrayList<>();
+        ArrayList<String> arrayTimeTension = new ArrayList<>();
+        ArrayList<String> arrayValueTension= new ArrayList<>();
+        ArrayList<String> arrayTimeAmperage = new ArrayList<>();
+        ArrayList<String> arrayValueAmperage= new ArrayList<>();
+
+        for (int index=currentEngineUI; index<=14;index=index+3)    //use currentEgnineUi instead of a new variable beacuse the indexes should start from 0,1,2 and currentUi does the same thing
+        {
+            ArrayList<String> engineValues = resultHistory.get(index);
+            for(String data:engineValues)
+            {
+                String divideData[] = data.split(",\\s*") ;// in ordet to split by , and space
+                String timePart = divideData[1].substring(divideData[1].indexOf('T') + 1, divideData[1].indexOf('.'));
+                if(index <3)
+                {
+                    arrayTimeTemperature.add(timePart);
+                    arrayValueTemperature.add(divideData[2]);
+                }
+                else if(index >=3 && index<6 )
+                {
+                    arrayTimePower.add(timePart);
+                    arrayValuePower.add(divideData[2]);
+                }
+                else if(index >=6 && index <9)
+                {
+                    arrayTimePF.add(timePart);
+                    arrayValuePF.add(divideData[2]);
+                }
+                else if(index>=9 && index <12)
+                {
+                    arrayTimeTension.add(timePart);
+                    arrayValueTension.add(divideData[2]);
+                }
+                else if(index>=12 && index <15)
+                {
+                    arrayTimeAmperage.add(timePart);
+                    arrayValueAmperage.add(divideData[2]);
+                }
+
+            }
+        }
+        // time values in arrayTime are in UTC format. However Romania is situated in UTC+3
+        // using this method to covert the UTC time in UTC+3
+        ArrayList<String> convertedTimesArrayTemperature = TimeConversionUTC.parseToUtcPlus3(arrayTimeTemperature);
+        ArrayList<String> convertedTimesArrayPower = TimeConversionUTC.parseToUtcPlus3(arrayTimePower);
+        ArrayList<String> convertedTimesArrayPF = TimeConversionUTC.parseToUtcPlus3(arrayTimePF);
+        ArrayList<String> convertedTimesArrayTension = TimeConversionUTC.parseToUtcPlus3(arrayTimeTension);
+        ArrayList<String> convertedTimesArrayAmperage = TimeConversionUTC.parseToUtcPlus3(arrayTimeAmperage);
+
+        String timeArrayAsStringTemperature = convertedTimesArrayTemperature.toString();
+        String valueArrayAsStringTemperature =arrayValueTemperature.toString();
+        String timeArrayAsStringPower = convertedTimesArrayPower.toString();
+        String valueArrayAsStringPower =arrayValuePower.toString();
+        String timeArrayAsStringPF = convertedTimesArrayPF.toString();
+        String valueArrayAsStringPF =arrayValuePF.toString();
+        String timeArrayAsStringTension = convertedTimesArrayTension.toString();
+        String valueArrayAsStringTension =arrayValueTension.toString();
+        String timeArrayAsStringAmperage = convertedTimesArrayAmperage.toString();
+        String valueArrayAsStringAmperage =arrayValueAmperage.toString();
+
+
+        String exportedMessage = String.format("For ENGINE number %d : \n \n TEMPERATURE VALUES: \n\n %s \n\n TEMPERATURE TIMES: \n\n %s \n\n" +
+                        "POWER VALUES: \n\n %s \n\n POWER TIMES: \n\n %s \n\n POWER FACTOR VALUES: \n\n %s \n\n POWER FACTOR TIMES: \n\n %s \n\n" +
+                        "TENSION VALUES: \n\n %s \n\n TENSION TIMES: \n\n %s \n\n AMPERAGE VALUES: \n\n %s \n\n AMPERAGE TIMES \n\n %s \n"
+                                            ,currentEngineUI+1,valueArrayAsStringTemperature,timeArrayAsStringTemperature
+                                            ,valueArrayAsStringPower,timeArrayAsStringPower
+                                            ,valueArrayAsStringPF,timeArrayAsStringPF
+                                            ,valueArrayAsStringTension,timeArrayAsStringTension
+                                            ,valueArrayAsStringAmperage,timeArrayAsStringAmperage);
+
+        sharedPreferences = getSharedPreferences("loginData", MODE_PRIVATE);
+        String receiverEmail = sharedPreferences.getString("email","djkmata.djkmata@gmail.com");
+        EmailCommunication emailCommunication = new EmailCommunication("ionelalexandru01@gmail.com","mfjhltkgndvfbksj",receiverEmail);
+        emailCommunication.sendEmail(exportedMessage);
+
+    }
+
 
     // sends emails to the email address logged regarding measurements that exceed or are below the limits set in settings
     public String sendEmailsAlert(Engine engine, int engineNo, String engineAlerts )
@@ -742,61 +839,61 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             if (engine.getTemperatureValue() < minTemperature && !engineAlerts.contains("minTemp"))
             {
                 engineAlerts = engineAlerts + "minTemp" + " ";
-                alertMessage += String.format("The temperature of engine number %d is BELOW %.2f °C minimum threshold! \n", engineNo,minTemperature);
+                alertMessage += String.format("The temperature of engine number %d is BELOW %.2f °C minimum threshold! Current value: %.2f \n", engineNo,minTemperature,engine.getTemperatureValue());
                 ok=1;
             }
             else if (engine.getTemperatureValue() > maxTemperature  && !engineAlerts.contains("maxTemp"))
             {
                 engineAlerts = engineAlerts + "maxTemp" + " ";
-                alertMessage += String.format("The temperature of engine number %d is ABOVE %.2f °C maximum threshold! \n", engineNo,maxTemperature);
+                alertMessage += String.format("The temperature of engine number %d is ABOVE %.2f °C maximum threshold! Current value: %.2f \n", engineNo,maxTemperature,engine.getTemperatureValue());
                 ok=1;
             }
             if (engine.getPowerValue() < minPower  && !engineAlerts.contains("minPower"))
             {
                 engineAlerts = engineAlerts + "minPower" + " ";
-                alertMessage += String.format("The power (W) of engine number %d is BELOW %.2f W minimum threshold! \n", engineNo,minPower);
+                alertMessage += String.format("The power (W) of engine number %d is BELOW %.2f W minimum threshold! Current value: %.2f \n", engineNo,minPower,engine.getPowerValue());
                 ok=1;
             }
             else if (engine.getPowerValue() > maxPower && !engineAlerts.contains("maxPower"))
             {
                 engineAlerts = engineAlerts + "maxPower" + " ";
-                alertMessage += String.format("The  power (W) of engine number %d is ABOVE %.2f W maximum threshold! \n", engineNo,maxPower);
+                alertMessage += String.format("The  power (W) of engine number %d is ABOVE %.2f W maximum threshold! Current value: %.2f\n", engineNo,maxPower,engine.getPowerValue());
                 ok=1;
             }
             if (engine.getPowerFactorValue() < minPowerFactor && !engineAlerts.contains("minPowerFactor"))
             {
                 engineAlerts = engineAlerts + "minPowerFactor" + " ";
-                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f W minimum threshold! \n", engineNo,minPowerFactor);
+                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f W minimum threshold! Current value: %.2f\n", engineNo,minPowerFactor,engine.getPowerFactorValue());
                 ok=1;
             }
             else if (engine.getPowerFactorValue() > maxPowerFactor && !engineAlerts.contains("maxPowerFactor"))
             {
                 engineAlerts = engineAlerts + "maxPowerFactor" + " ";
-                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f W maximum threshold! \n", engineNo,maxPowerFactor);
+                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f W maximum threshold! Current value: %.2f\n", engineNo,maxPowerFactor,engine.getPowerFactorValue());
                 ok=1;
             }
             if (engine.getTensionValue() < minTension && !engineAlerts.contains("minTension"))
             {
                 engineAlerts = engineAlerts + "minTension" + " ";
-                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f V minimum threshold! \n", engineNo,minTension);
+                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f V minimum threshold! Current value: %.2f \n", engineNo,minTension,engine.getTensionValue());
                 ok=1;
             }
             else if (engine.getTensionValue() > maxTension && !engineAlerts.contains("maxTension"))
             {
                 engineAlerts = engineAlerts + "maxTension" + " ";
-                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f V maximum threshold! \n", engineNo,maxTension);
+                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f V maximum threshold! Current value: %.2f \n", engineNo,maxTension,engine.getTensionValue());
                 ok=1;
             }
             if (engine.getAmperageValue() < minAmperage && !engineAlerts.contains("minAmperage"))
             {
                 engineAlerts = engineAlerts + "minAmperage" + " ";
-                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f A minimum threshold! \n", engineNo,minAmperage);
+                alertMessage += String.format("The power factor of engine number %d is BELOW %.2f A minimum threshold! Current value: %.2f \n", engineNo,minAmperage,engine.getAmperageValue());
                 ok=1;
             }
             else if (engine.getAmperageValue() > maxAmperage && !engineAlerts.contains("maxAmperage"))
             {
                 engineAlerts = engineAlerts + "maxAmperage" + " ";
-                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f A maximum threshold! \n", engineNo,maxAmperage);
+                alertMessage += String.format("The  power factor of engine number %d is ABOVE %.2f A maximum threshold! Current value: %.2f \n", engineNo,maxAmperage,engine.getAmperageValue());
                 ok=1;
             }
             //flag - if anything exceeds only then we send a email!
