@@ -136,11 +136,10 @@ public class SettingsActivity extends AppCompatActivity {
                 {
                     Intent toHomeIntent = new Intent(getApplicationContext(), HomeActivity.class);
                     startActivity(toHomeIntent);
-                    Toast.makeText(getApplicationContext(),"HOME PRESSED!",Toast.LENGTH_SHORT).show();
                 }
                 else if(item.getItemId() == R.id.navSettings)
                 {
-                    Toast.makeText(getApplicationContext(),"Settings PRESSED!",Toast.LENGTH_SHORT).show();
+                   //do nothing
                 }
                 else
                 {

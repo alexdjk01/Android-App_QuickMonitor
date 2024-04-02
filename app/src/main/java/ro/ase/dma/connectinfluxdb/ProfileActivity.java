@@ -179,17 +179,17 @@ public class ProfileActivity extends AppCompatActivity {
                 {
                     Intent toHomeIntent = new Intent(getApplicationContext(), HomeActivity.class);
                     startActivity(toHomeIntent);
-                    Toast.makeText(getApplicationContext(),"HOME PRESSED!",Toast.LENGTH_SHORT).show();
+
                 }
                 else if(item.getItemId() == R.id.navSettings)
                 {
                     Intent toSettingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
                     startActivity(toSettingsIntent);
-                    Toast.makeText(getApplicationContext(),"Settings PRESSED!",Toast.LENGTH_SHORT).show();
+
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(),"Profile PRESSED!",Toast.LENGTH_SHORT).show();
+                  //do nothing
                 }
                 return true;
             }

@@ -36,6 +36,7 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
 // UNRELATED TO HOME ACTIVITY!!!!!!!!!!!!!!!!!!!!!!!!!
 // DECI IN FUNCTIE DE DATELE PRIMITE DE LA INFLUX DB NE PUTEM DA SEAMA CATE MOTOARE TRANSMIT INFORMATII
 // O SA CREEZ ATATEA OBIECTE DE TIP MOTOR CATE SUNT TRANSMISE SI VOI POPULA UN RECYCLER VIEW SAU CEVA DE GENU CU ACESTE MOTOARE SI VOI PERMITE SA LE
@@ -500,9 +501,13 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             arrayTime.add(timePart);
             arrayValue.add(divideData[2]);
         }
-        Log.w("Time", String.valueOf(arrayTime));
+
         Log.w("Value", String.valueOf(arrayValue));
 
+        // time values in arrayTime are in UTC format. However Romania is situated in UTC+3
+        // using this method to covert the UTC time in UTC+3
+        ArrayList<String> convertedTimesArray = TimeConversionUTC.parseToUtcPlus3(arrayTime);
+        Log.w("Time", String.valueOf(convertedTimesArray));
 
         ArrayList<Double> doubleValues = new ArrayList<>();
         for (String strValue : arrayValue) {
@@ -521,7 +526,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                graphPlotFunction(plot,lowerBoundry,upperBoundry,arrayTime, doubleArray, interval,title,increment_range_by, increment_domain_by);
+                graphPlotFunction(plot,lowerBoundry,upperBoundry,convertedTimesArray, doubleArray, interval,title,increment_range_by, increment_domain_by);
                 plot.redraw();
             }
         });
