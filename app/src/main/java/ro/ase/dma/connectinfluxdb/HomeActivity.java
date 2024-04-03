@@ -2,11 +2,20 @@ package ro.ase.dma.connectinfluxdb;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -36,12 +45,6 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
-// UNRELATED TO HOME ACTIVITY!!!!!!!!!!!!!!!!!!!!!!!!!
-// DECI IN FUNCTIE DE DATELE PRIMITE DE LA INFLUX DB NE PUTEM DA SEAMA CATE MOTOARE TRANSMIT INFORMATII
-// O SA CREEZ ATATEA OBIECTE DE TIP MOTOR CATE SUNT TRANSMISE SI VOI POPULA UN RECYCLER VIEW SAU CEVA DE GENU CU ACESTE MOTOARE SI VOI PERMITE SA LE
-// ATINGI IN HOME ACTIVITY CA SA INTRII IN DASHBOARDUL FIECARUI MOTOR!
-
 public class HomeActivity extends AppCompatActivity implements DataUpdateCallback {
     private BottomNavigationView bottomNavigation;
     private User receivedUserLogged = null;
@@ -55,9 +58,10 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     Engine engineThree;
 
     // in order not to spam, this string will save which emails were sent for every measurement.
-    String engineOneAlertsSent =" ";
-    String engineTwoAlertsSent =" ";
-    String engineThreeAlertsSent =" ";
+    // made them static in order to keep the value even though i navigate to another activity and come back.
+    static String engineOneAlertsSent =" ";
+    static String engineTwoAlertsSent =" ";
+    static String engineThreeAlertsSent =" ";
 
     // dynamically renders the UI for that specific engine
     private Button btnEngine1;
@@ -841,6 +845,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         String valueArrayAsStringAmperage =arrayValueAmperage.toString();
 
 
+        @SuppressLint("DefaultLocale")
         String exportedMessage = String.format("For ENGINE number %d : \n \n TEMPERATURE VALUES: \n\n %s \n\n TEMPERATURE TIMES: \n\n %s \n\n" +
                         "POWER VALUES: \n\n %s \n\n POWER TIMES: \n\n %s \n\n POWER FACTOR VALUES: \n\n %s \n\n POWER FACTOR TIMES: \n\n %s \n\n" +
                         "TENSION VALUES: \n\n %s \n\n TENSION TIMES: \n\n %s \n\n AMPERAGE VALUES: \n\n %s \n\n AMPERAGE TIMES \n\n %s \n"
@@ -857,6 +862,45 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
     }
 
+    public void sendNotification(String notificationMessage)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission (HomeActivity.this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(HomeActivity.this, new String[]{ android.Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
+
+        String chanelID = "QUICK_MONITOR_NOTIFICATION";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),chanelID);
+        builder.setSmallIcon(R.drawable.icon_notification);
+        builder.setContentTitle("Quick Monitor Alert");
+        builder.setContentText(notificationMessage);
+        builder.setAutoCancel(true);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("data_notification","NOTIFICATION");
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,intent,PendingIntent.FLAG_MUTABLE);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager managerNotifications = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.O)
+        {
+            NotificationChannel notificationChannel = managerNotifications.getNotificationChannel(chanelID);
+            if (notificationChannel == null) {
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                notificationChannel = new NotificationChannel (chanelID, "Some description", importance);
+                notificationChannel.setLightColor(Color.BLUE);
+                notificationChannel.enableVibration (true);
+                managerNotifications.createNotificationChannel(notificationChannel);
+            }
+        }
+
+        managerNotifications.notify(0,builder.build());
+
+    }
 
     // sends emails to the email address logged regarding measurements that exceed or are below the limits set in settings
     public String sendEmailsAlert(Engine engine, int engineNo, String engineAlerts )
@@ -944,6 +988,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 String receiverEmail = sharedPreferences.getString("email","djkmata.djkmata@gmail.com");
                 EmailCommunication emailCommunication = new EmailCommunication("ionelalexandru01@gmail.com","mfjhltkgndvfbksj",receiverEmail);
                 emailCommunication.sendEmail(alertMessage);
+                sendNotification(alertMessage);
             }
 
         }

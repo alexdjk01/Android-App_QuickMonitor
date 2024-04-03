@@ -36,21 +36,8 @@ public class EmailCommunication {
 
     public void sendEmail(String text){
 
-
         try {
-           // String stringSenderEmail = "ionelalexandru01@gmail.com";
-           // String stringReceiverEmail = "djkmata.djkmata@gmail.com";
-           // String stringPasswordSenderEmail = "mfjhltkgndvfbksj";  //mfjh ltkg ndvf bksj
-
             Properties properties = new Properties();
-
-//            properties.put("mail.smtp.host", stringHost);
-//            properties.put("mail.smtp.port", "465");
-//            properties.put("mail.smtp.ssl.enable", "true");
-//            properties.put("mail.smtp.auth", "true");
-//            properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-//            properties.put("mail.smtp.socketFactory.port", "465");
-
             //Try using TLS - working!
             properties.put("mail.smtp.host", "smtp.gmail.com");
             properties.put("mail.smtp.port", "587");
@@ -64,9 +51,7 @@ public class EmailCommunication {
                     return new PasswordAuthentication(stringSenderEmail, stringPasswordSenderEmail);
                 }
             });
-
             //session.setDebug(true);
-
             MimeMessage mimeMessage = new MimeMessage(session);
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(stringReceiverEmail));
 
