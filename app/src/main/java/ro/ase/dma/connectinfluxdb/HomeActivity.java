@@ -54,21 +54,26 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     Engine engineTwo;
     Engine engineThree;
 
+    // in order not to spam, this string will save which emails were sent for every measurement.
     String engineOneAlertsSent =" ";
     String engineTwoAlertsSent =" ";
     String engineThreeAlertsSent =" ";
 
+    // dynamically renders the UI for that specific engine
     private Button btnEngine1;
     private Button btnEngine2;
     private Button btnEngine3;
 
+    //exports the history data up the current moment to the logged in email
     private Button btnExportMail;
 
+    // instead of a progress bar i chose to show the temperature using a text view
+    //because is the most important aspect of the engine and should be seen reality
     private TextView tvNumericalTemperature;
 
+    // Semi-Circular progress bars that will display the current data from the engine in real time.
     private SemiCircularProgressBar pbPower;
     private SemiCircularProgressBar pbPowerFactor;
-
     private SemiCircularProgressBar pbTension;
     private SemiCircularProgressBar pbAmperage;
 
@@ -88,16 +93,31 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     private XYPlot graphPlotAmperage;
     private Spinner spinnerTimeAmperage;
 
-
-
-
+    //TextViews that will be populated dynamically with min/max/avg values for each measurement type
+    private TextView tvMinimumValueTemperature;
+    private TextView tvMaximumValueTemperature;
+    private TextView tvAverageValueTemperature;
+    private TextView tvMinimumValuePower;
+    private TextView tvMaximumValuePower;
+    private TextView tvAverageValuePower;
+    private TextView tvMinimumValuePowerFactor;
+    private TextView tvMaximumValuePowerFactor;
+    private TextView tvAverageValuePowerFactor;
+    private TextView tvMinimumValueTension;
+    private TextView tvMaximumValueTension;
+    private TextView tvAverageValueTension;
+    private TextView tvMinimumValueAmperage;
+    private TextView tvMaximumValueAmperage;
+    private TextView tvAverageValueAmperage;
 
     // global variable tht will keep track of which engine should be displayed!
     // default value is 2 to view engine no3
     private int currentEngineUI=2;
+
+    // this graph Interval is the default number of items that are shown on the graph
     public int[] graphInterval = new int[5]; //default shows ony 9 values
 
-    //shared preferecnes
+    //shared preferecnes to trasnfer email or URL or other things
     SharedPreferences sharedPreferences;
 
     @Override
@@ -133,7 +153,21 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         graphPlotAmperage = findViewById(R.id.graphPlotAmpergae);
         spinnerTimeAmperage = findViewById(R.id.spinnerTimeAmperage);
 
-
+        tvAverageValueTemperature = findViewById(R.id.tvAvgValTemp);
+        tvMinimumValueTemperature = findViewById(R.id.tvMinValTemp);
+        tvMaximumValueTemperature = findViewById(R.id.tvMaxValTemp);
+        tvAverageValuePower = findViewById(R.id.tvAvgValPower);
+        tvMinimumValuePower = findViewById(R.id.tvMinValPower);
+        tvMaximumValuePower = findViewById(R.id.tvMaxValPower);
+        tvAverageValuePowerFactor = findViewById(R.id.tvAvgValPowerFactor);
+        tvMinimumValuePowerFactor = findViewById(R.id.tvMinValPowerFactor);
+        tvMaximumValuePowerFactor = findViewById(R.id.tvMaxValPowerFactor);
+        tvAverageValueTension = findViewById(R.id.tvAvgValTension);
+        tvMinimumValueTension = findViewById(R.id.tvMinValTension);
+        tvMaximumValueTension = findViewById(R.id.tvMaxValTension);
+        tvAverageValueAmperage = findViewById(R.id.tvAvgValAmperage);
+        tvMinimumValueAmperage = findViewById(R.id.tvMinValAmperage);
+        tvMaximumValueAmperage = findViewById(R.id.tvMaxValAmperage);
 
         bottomNavigation = findViewById(R.id.navigationMenuBar);
 
@@ -448,6 +482,8 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
 
 
+    // method that is in charge with the design of the graph.
+    // here the graph specifications are made and the arrays are inserted into the graph
     public void graphPlotFunction(XYPlot plot, int lowerBoundry, int upperBoundry, ArrayList<String> domainLabels, Double[] seriesNumbers, int interval, String title, float increment_range_by, float increment_domain_by)
     {
         plot.clear();
@@ -484,19 +520,17 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 }
                 else
                     return stringBuffer.append("");
-
             }
-
             @Override
             public Object parseObject(String s, ParsePosition parsePosition) {
                 return null;
             }
         });
-
         PanZoom.attach(plot);
-
     }
 
+    // this method is the one that gets the final arrays that will be inserted into the graph
+    // using that function graphPlotfunction() on a separate thread we INSERT and display them on the graph
     public void populateGraphHistory(XYPlot plot,int lowerBoundry,int upperBoundry,int index, int interval,String title, float increment_range_by, float increment_domain_by)
     {
         ArrayList<String> arrayTime = new ArrayList<>();
@@ -545,6 +579,9 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         });
     }
 
+    // this method clears the resultHistory , Adds the data from influxDb into separate arrays for each measurement(15 measurements for 3 engines),
+    // and then populates the reusltHistory again with the new received history from the databse
+    // it clears the history beacuse maybe in the meantime noew values were loaded into the database and we need the lastest database.
     public void splitValuesHistory(ArrayList<String> dataArray)
     {
         ArrayList<String> T0 = new ArrayList<>(); //0   -- index in resultHistory
@@ -662,6 +699,9 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         resultHistory.add(I_2);
     }
 
+    // when new data is transmitted from the InfluxDB, this method checks if history data is transmitted or current data
+    // in case of history data (the data array is larger that 15 entries), this method calls another method splitValuesHistory to clear the history data and add again the values.
+    // in case of current data, it clears the engines array and populates a holder with maximum 5 values(there are exact 5 measurements)- basicly an engine - and adds it again to the engine Array
     @Override
     public void onDataChanged(ArrayList<String> dataArray) {
 
@@ -713,7 +753,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
     }
 
-    //%d
+    // method to save the current data that enters the application into resultHistory even though the engine is not in focus on the UI
     public void loadDataSeparatelyAndSaveItInResultHistoryEvenWhenNotInFocus(){
         resultHistory.get(0).add(String.format("T%d, %s, %f",0,engineOne.getTemperatureTime(),engineOne.getTemperatureValue()));
         resultHistory.get(1).add(String.format("T%d, %s, %f",1,engineTwo.getTemperatureTime(),engineTwo.getTemperatureValue()));
@@ -732,6 +772,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         resultHistory.get(14).add(String.format("I_%d, %s, %f",2,engineThree.getAmperageTime(),engineThree.getAmperageValue()));
     }
 
+    //method for exporting all the history up to current values in the database
     public void sendEmailsExportHistory(ArrayList<ArrayList<String>> resultHistory)
     {
         ArrayList<String> arrayTimeTemperature = new ArrayList<>();
@@ -913,6 +954,110 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         return engineAlerts;
     }
 
+    //calculate minimum value of a measurement array
+    public Double getCalculatedMinimumValue(ArrayList<String> valuesArray)
+    {
+        double minimumResult= 9999;
+        for(String value : valuesArray)
+        {
+            double valueAsDouble = Double.parseDouble(value);
+            if(valueAsDouble < minimumResult)
+            {
+                minimumResult=valueAsDouble;
+            }
+        }
+        return minimumResult;
+    }
+
+    //calculate maximum value of a measurement array
+    public Double getCalculatedMaximumValue(ArrayList<String> valuesArray)
+    {
+        double maximumResult= 0;
+        for(String value : valuesArray)
+        {
+            double valueAsDouble = Double.parseDouble(value);
+            if(valueAsDouble > maximumResult)
+            {
+                if(valueAsDouble <300) //because sometimes the sensor of temperature spikes to 999 when plugged in
+                    maximumResult=valueAsDouble;
+            }
+        }
+        return maximumResult;
+    }
+
+    //calculate average value of a measurement array
+    public Double getCalculatedAverageValue(ArrayList<String> valuesArray)
+    {
+        double averageResult= 0;
+        double totalSum=0;
+        double totalSize=0;
+        for(String value : valuesArray)
+        {
+            double valueAsDouble = Double.parseDouble(value);
+            if(valueAsDouble <300) //because sometimes the sensor of temperature spikes to 999 when plugged in
+            {
+                totalSize++;
+                totalSum+=valueAsDouble;
+            }
+        }
+        averageResult=totalSum/totalSize;
+        return averageResult;
+    }
+
+    // method to calculate the minimum, maximum and average values from history up to current for each measurement.
+    public void setMeasurementsMinMaxAvg()
+    {
+        ArrayList<String> arrayValueTemperature= new ArrayList<>();
+        ArrayList<String> arrayValuePower= new ArrayList<>();
+        ArrayList<String> arrayValuePF= new ArrayList<>();
+        ArrayList<String> arrayValueTension= new ArrayList<>();
+        ArrayList<String> arrayValueAmperage= new ArrayList<>();
+
+        for (int index=currentEngineUI; index<=14;index=index+3)    //use currentEngineUI to get the data only for the current displayed engine
+        {
+            ArrayList<String> engineValues = resultHistory.get(index);
+            for(String data:engineValues)
+            {
+                String divideData[] = data.split(",\\s*") ;// in ordet to split by , and space
+                if(index <3)
+                {
+                    arrayValueTemperature.add(divideData[2]);
+                }
+                else if(index >=3 && index<6 )
+                {
+                    arrayValuePower.add(divideData[2]);
+                }
+                else if(index >=6 && index <9)
+                {
+                    arrayValuePF.add(divideData[2]);
+                }
+                else if(index>=9 && index <12)
+                {
+                    arrayValueTension.add(divideData[2]);
+                }
+                else if(index>=12 && index <15)
+                {
+                    arrayValueAmperage.add(divideData[2]);
+                }
+            }
+        }
+
+        tvMinimumValueTemperature.setText(getCalculatedMinimumValue(arrayValueTemperature).toString());
+        tvMaximumValueTemperature.setText(getCalculatedMaximumValue(arrayValueTemperature).toString());
+        tvAverageValueTemperature.setText(String.format("%.2f", getCalculatedAverageValue(arrayValueTemperature)));
+        tvMinimumValuePower.setText(getCalculatedMinimumValue(arrayValuePower).toString());
+        tvMaximumValuePower.setText(getCalculatedMaximumValue(arrayValuePower).toString());
+        tvAverageValuePower.setText(String.format("%.2f", getCalculatedAverageValue(arrayValuePower)));
+        tvMinimumValueTension.setText(getCalculatedMinimumValue(arrayValueTension).toString());
+        tvMaximumValueTension.setText(getCalculatedMaximumValue(arrayValueTension).toString());
+        tvAverageValueTension.setText(String.format("%.2f", getCalculatedAverageValue(arrayValueTension)));
+        tvMinimumValuePowerFactor.setText(getCalculatedMinimumValue(arrayValuePF).toString());
+        tvMaximumValuePowerFactor.setText(getCalculatedMaximumValue(arrayValuePF).toString());
+        tvAverageValuePowerFactor.setText(String.format("%.2f", getCalculatedAverageValue(arrayValuePF)));
+        tvMinimumValueAmperage.setText(getCalculatedMinimumValue(arrayValueAmperage).toString());
+        tvMaximumValueAmperage.setText(getCalculatedMaximumValue(arrayValueAmperage).toString());
+        tvAverageValueAmperage.setText(String.format("%.2f", getCalculatedAverageValue(arrayValueAmperage)));
+    }
 
     // func for update UI elements that will be called from dataChanged
     public void updateUI(ArrayList<ArrayList<String>> groupedEngines)
@@ -965,14 +1110,17 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         pbAmperage.setMinMax(0,1);
         pbAmperage.setProgress(engineAux.getAmperageValue());
 
+        // methods to populate the graphs
         populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval[0],"Temperature",4,1);
         populateGraphHistory(graphPlotPower,0,200,currentEngineUI+3,graphInterval[1],"Power",20F,1);
         populateGraphHistory(graphPlotTension,0,500,currentEngineUI+9,graphInterval[2],"Tension",40F,1);
         populateGraphHistory(graphPlotAmperage,0,1,currentEngineUI+12,graphInterval[3],"Amperage", 0.1F,1);
 
+        //method to populate the Measurement section (min,max,avg values)
+        setMeasurementsMinMaxAvg();
     }
 
-    //-------------------
+    //method for populating the engines with their values and send emails if they exceed the maximum threshold
     public void fetchLiveDataForEachEngine(ArrayList<ArrayList<String>> groupedEngines)
     {
         for( int engineNumber=0; engineNumber < groupedEngines.size(); engineNumber++)
@@ -1017,8 +1165,6 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 engineThree = new Engine(temperatureTime,temperatureValue,powerTime,powerValue,powerFactorTime,powerFactorValue,tensionTime,tensionValue,amperageTime,amperageValue);
                 engineThreeAlertsSent=sendEmailsAlert(engineThree,3, engineThreeAlertsSent);
             }
-
-
         }
     }
 
