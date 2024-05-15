@@ -488,28 +488,23 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
     // method that is in charge with the design of the graph.
     // here the graph specifications are made and the arrays are inserted into the graph
-    public void graphPlotFunction(XYPlot plot, int lowerBoundry, int upperBoundry, ArrayList<String> domainLabels, Double[] seriesNumbers, int interval, String title, float increment_range_by, float increment_domain_by)
+    public void graphPlotFunction(XYPlot plot, int lowerBoundry, int upperBoundry, ArrayList<String> domainLabels,
+                                  Double[] seriesNumbers, int interval, String title, float increment_range_by, float increment_domain_by)
     {
         plot.clear();
         XYSeries series1 = new SimpleXYSeries(Arrays.asList(seriesNumbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, title);
-
-        //to show in focus only the last 10 elements
         int endIndex = series1.size()-1;
         int startIndex = Math.max(0,endIndex-interval);
-
         LineAndPointFormatter series1Format = new LineAndPointFormatter(
                 getApplicationContext().getColor(R.color.green_avocado),
                 getApplicationContext().getColor(R.color.green_avocado),
                 getApplicationContext().getColor(R.color.blue_ediText),
                 null);
-
         plot.addSeries(series1, series1Format);
         plot.setRangeBoundaries(lowerBoundry, upperBoundry, BoundaryMode.FIXED);
         plot.setRangeStep(StepMode.INCREMENT_BY_VAL, increment_range_by);
-
         plot.setDomainBoundaries(startIndex,endIndex,BoundaryMode.FIXED);
         plot.setDomainStep(StepMode.INCREMENT_BY_VAL,increment_domain_by);
-
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
             @Override
             public StringBuffer format(Object obj, StringBuffer stringBuffer, FieldPosition fieldPosition) {
@@ -869,7 +864,6 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 ActivityCompat.requestPermissions(HomeActivity.this, new String[]{ android.Manifest.permission.POST_NOTIFICATIONS}, 101);
             }
         }
-
         String chanelID = "QUICK_MONITOR_NOTIFICATION";
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),chanelID);
         builder.setSmallIcon(R.drawable.icon_notification);
@@ -877,15 +871,12 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         builder.setContentText(notificationMessage);
         builder.setAutoCancel(true);
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("data_notification","NOTIFICATION");
-
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,intent,PendingIntent.FLAG_MUTABLE);
         builder.setContentIntent(pendingIntent);
         NotificationManager managerNotifications = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.O)
         {
             NotificationChannel notificationChannel = managerNotifications.getNotificationChannel(chanelID);
@@ -897,9 +888,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 managerNotifications.createNotificationChannel(notificationChannel);
             }
         }
-
         managerNotifications.notify(0,builder.build());
-
     }
 
     // sends emails to the email address logged regarding measurements that exceed or are below the limits set in settings
@@ -1057,7 +1046,6 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         ArrayList<String> arrayValuePF= new ArrayList<>();
         ArrayList<String> arrayValueTension= new ArrayList<>();
         ArrayList<String> arrayValueAmperage= new ArrayList<>();
-
         for (int index=currentEngineUI; index<=14;index=index+3)    //use currentEngineUI to get the data only for the current displayed engine
         {
             ArrayList<String> engineValues = resultHistory.get(index);

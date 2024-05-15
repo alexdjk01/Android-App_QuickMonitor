@@ -79,39 +79,30 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String email = etEmail.getText().toString();
                 String URL = etURL.getText().toString();
-                //check if the credentials are saved in the database
-                if(verifyCredentials(email,URL))   // if the email and password are written properly
-                {
-                    // save the email and password in a shared preference resource in order to dinamically change the IP and receiver email
+                if(verifyCredentials(email,URL))   // if the email and URL are written properly
+                {// save the email and URL in a shared preference resource in order to dynamic change the IP and receiver email
                     sharedPreferences = getSharedPreferences("loginData",MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.clear();
                     editor.putString("email",email);
                     editor.putString("URL",URL);
                     editor.commit();
-
                     if(userDao.getUserByEmail(email) != null)   // if the user exists in the database
                     {
-
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-
-                                //get the user from the database by his email ( the email is unique to each user) in a new thread in order not to block the main one
+                                //get user from the db (the email is unique ) in a new thread not to block main th
                                 User loggedUser = userDao.getUserByEmail(email);
                                 if(loggedUser!= null)
                                 {
-                                    Log.w("USERRRRRR", loggedUser.toString());
                                     loggedUser.setURL(URL);
                                     userDao.update(loggedUser);
-                                    // need to lunch the main dashboard
                                     runOnUiThread(new Runnable() {      // get back on the main thread to start a new activity
                                         @Override
                                         public void run() {
-
                                             Intent loginIntent = new Intent(getApplicationContext(), HomeActivity.class);
                                             loginIntent.putExtra("keyLogin", loggedUser);
                                             loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -140,12 +131,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private Boolean verifyCredentials(String email, String url){
-
         String IPregex = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(:\\d{1,5})?$";
-        //String passwordRegex = "^(?=.*[A-Z])(?=.*[0-9]).+$"; // ^/$ start and end of regex string
-        //  (?=.*[A-Z]) checks if an uppercase letter is present in the password input
-        //  (?=.*[0-9]) checks if a number is present in the password input
-        //so if the email does not match email format or the password does not contain uppercase and number or the length is smaller than 7 it will return false
         if(   email.isEmpty() || !(Patterns.EMAIL_ADDRESS.matcher(email).matches()) )
         {
             tvAlertEmail.setText("Email format: joedoe@email.com");
