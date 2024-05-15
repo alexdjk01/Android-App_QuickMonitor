@@ -93,26 +93,51 @@ public class SettingsActivity extends AppCompatActivity {
                 if(swTemperature.isChecked()){
                     editor.putFloat("minTemperature",Float.parseFloat(etTemperatureMin.getText().toString()));
                     editor.putFloat("maxTemperature",Float.parseFloat(etTemperatureMax.getText().toString()));
+                    editor.putBoolean("onTemperature" , true);
+                }
+                else
+                {
+                    editor.putBoolean("onTemperature" , false);
                 }
                 if(swPower.isChecked())
                 {
                     editor.putFloat("minPower",Float.parseFloat(etPowerMin.getText().toString()));
                     editor.putFloat("maxPower",Float.parseFloat(etPowerMax.getText().toString()));
+                    editor.putBoolean("onPower" , true);
+                }
+                else
+                {
+                    editor.putBoolean("onPower" , false);
                 }
                 if(swPowerFactor.isChecked())
                 {
                     editor.putFloat("minPowerFactor",Float.parseFloat(etPowerFactorMin.getText().toString()));
                     editor.putFloat("maxPowerFactor",Float.parseFloat(etPowerFactorMax.getText().toString()));
+                    editor.putBoolean("onPowerFactor" , true);
+                }
+                else
+                {
+                    editor.putBoolean("onPowerFactor" , false);
                 }
                 if(swTension.isChecked())
                 {
                     editor.putFloat("minTension",Float.parseFloat(etTensionMin.getText().toString()));
                     editor.putFloat("maxTension",Float.parseFloat(etTensionMax.getText().toString()));
+                    editor.putBoolean("onTension" , true);
+                }
+                else
+                {
+                    editor.putBoolean("onTension" , false);
                 }
                 if(swAmperage.isChecked())
                 {
                     editor.putFloat("minAmperage",Float.parseFloat(etAmperageMin.getText().toString()));
                     editor.putFloat("maxAmperage",Float.parseFloat(etAmperageMax.getText().toString()));
+                    editor.putBoolean("onAmperage" , true);
+                }
+                else
+                {
+                    editor.putBoolean("onAmperage" , false);
                 }
 
                 editor.apply();
@@ -157,6 +182,11 @@ public class SettingsActivity extends AppCompatActivity {
         //populates the editexts values with the ones that are stored in shared preferences. if none, put 0.0 for each
         try{
             sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+            boolean onTemperature = sharedPreferences.getBoolean("onTemperature",false);
+            boolean onPower = sharedPreferences.getBoolean("onPower",false);
+            boolean onPowerFactor = sharedPreferences.getBoolean("onPowerFactor",false);
+            boolean onTension = sharedPreferences.getBoolean("onTension",false);
+            boolean onAmperage = sharedPreferences.getBoolean("onAmperage",false);
             etTemperatureMin.setText(String.valueOf(sharedPreferences.getFloat("minTemperature",0.0f)));
             etTemperatureMax.setText(String.valueOf(sharedPreferences.getFloat("maxTemperature",0.0f)));
             etPowerMin.setText(String.valueOf(sharedPreferences.getFloat("minPower",0.0f)));
@@ -168,16 +198,11 @@ public class SettingsActivity extends AppCompatActivity {
             etAmperageMin.setText(String.valueOf(sharedPreferences.getFloat("minAmperage",0.0f)));
             etAmperageMax.setText(String.valueOf(sharedPreferences.getFloat("maxAmperage",0.0f)));
 
-            if (!etTemperatureMin.getText().toString().equals("0.0") || !etTemperatureMax.getText().toString().equals("0.0"))
-                swTemperature.setChecked(true);
-            if (!etPowerMin.getText().toString().equals("0.0") || !etPowerMax.getText().toString().equals("0.0"))
-                swPower.setChecked(true);
-            if (!etPowerFactorMin.getText().toString().equals("0.0") || !etPowerFactorMax.getText().toString().equals("0.0"))
-                swPowerFactor.setChecked(true);
-            if (!etTensionMin.getText().toString().equals("0.0") || !etTensionMax.getText().toString().equals("0.0"))
-                swTension.setChecked(true);
-            if (!etAmperageMin.getText().toString().equals("0.0") || !etAmperageMin.getText().toString().equals("0.0"))
-                swAmperage.setChecked(true);
+            swTemperature.setChecked(onTemperature);
+            swPower.setChecked(onPower);
+            swPowerFactor.setChecked(onPowerFactor);
+            swTension.setChecked(onTension);
+            swAmperage.setChecked(onAmperage);
         }
         catch (Error e)
         {
