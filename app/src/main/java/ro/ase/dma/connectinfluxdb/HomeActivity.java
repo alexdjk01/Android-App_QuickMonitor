@@ -1106,8 +1106,21 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             engineAux = new Engine(engineThree);
 
         //update UI progresses
+        sharedPreferences = getSharedPreferences("colors",MODE_PRIVATE);
+
+        Double minTemperature = (double) sharedPreferences.getFloat("limitMinTemperature",0.0f);
+        Double maxTemperature = (double) sharedPreferences.getFloat("limitMaxTemperature",31.0f);
+        Double minPower = (double) sharedPreferences.getFloat("limitMinPower",0.0f);
+        Double maxPower = (double) sharedPreferences.getFloat("limitMaxPower",250.0f);
+        Double minPowerFactor = (double) sharedPreferences.getFloat("limitMinPowerFactor",70.0f);
+        Double maxPowerFactor = (double) sharedPreferences.getFloat("limitMaxPowerFactor",100.0f);
+        Double minTension = (double) sharedPreferences.getFloat("limitMinTension",200.0f);
+        Double maxTension = (double) sharedPreferences.getFloat("limitMaxTension",240.0f);
+        Double minAmperage = (double) sharedPreferences.getFloat("limitMinAmperage",0.1f);
+        Double maxAmperage = (double) sharedPreferences.getFloat("limitMaxAmperage",1.0f);
+
         tvNumericalTemperature.setText(String.format("%.2f °C", engineAux.getTemperatureValue()));
-        if(engineAux.getTemperatureValue() > 31)
+        if(engineAux.getTemperatureValue() > maxTemperature || engineAux.getTemperatureValue() < minTemperature )
             tvNumericalTemperature.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
         else
             tvNumericalTemperature.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
@@ -1117,7 +1130,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         pbPower.setProgress(engineAux.getPowerValue());
         if(engineAux.getPowerValue() >150 && engineAux.getPowerValue() <250)
             pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
-        else if (engineAux.getPowerValue() >250)
+        else if (engineAux.getPowerValue() >maxPower || engineAux.getPowerValue() <minPower)
             pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
         else
             pbPower.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
@@ -1126,14 +1139,14 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         pbPowerFactor.setProgress(engineAux.getPowerFactorValue());
         if(engineAux.getPowerFactorValue() >70 && engineAux.getPowerFactorValue() <90 )
             pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
-        else if (engineAux.getPowerFactorValue() <70 )
+        else if (engineAux.getPowerFactorValue() < minPowerFactor || engineAux.getPowerFactorValue() >maxPowerFactor  )
             pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
         else
             pbPowerFactor.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
 
         pbTension.setMinMax(0,400);
         pbTension.setProgress(engineAux.getTensionValue());
-        if(engineAux.getTensionValue() >200 && engineAux.getTensionValue() <240 )
+        if(engineAux.getTensionValue() >minTension && engineAux.getTensionValue() <=maxTension )
             pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
         else if (engineAux.getTensionValue() >180 && engineAux.getTensionValue() <=200 )
             pbTension.setColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_measurement));
@@ -1142,6 +1155,10 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
         pbAmperage.setMinMax(0,1);
         pbAmperage.setProgress(engineAux.getAmperageValue());
+        if(engineAux.getAmperageValue() >minAmperage && engineAux.getAmperageValue() <=maxAmperage)
+            pbAmperage.setColor(ContextCompat.getColor(getApplicationContext(), R.color.green_measurement));
+        else
+            pbAmperage.setColor(ContextCompat.getColor(getApplicationContext(), R.color.red_measurement));
 
         // methods to populate the graphs
         populateGraphHistory(graphPlotTemperature,0,40,currentEngineUI,graphInterval[0],"Temperature",4,1);

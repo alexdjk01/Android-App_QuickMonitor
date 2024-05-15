@@ -20,10 +20,18 @@
         android:fontFamily="@font/playfairdisplaybold"
         android:textStyle="bold" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Settings"
+        android:layout_above="@+id/navigationMenuBar"
+         >
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="40dp"
         android:orientation="vertical">
 
         <TextView
@@ -357,13 +365,314 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tvProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppinsmedium"
+            android:textColor="@color/white"
+            android:textStyle="italic"
+            android:textSize="20dp"
+            android:text="Progress Bars color limits" />
+
+        <TextView
+            android:id="@+id/tvProgressBarInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="-10dp"
+            android:fontFamily="@font/poppinsmedium"
+            android:textColor="@color/grey_colorHint"
+            android:textSize="10dp"
+            android:text="ⓘ Minimum color limit will be RED and maximum will be GREEN" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/colorTemperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Temperature"
+                android:textColor="#AFA9A9"
+                android:textSize="15dp" />
+
+
+
+            <EditText
+                android:id="@+id/etColorTempMin"
+                android:hint="MIN"
+                android:inputType="numberSigned|numberDecimal"
+                android:textColorHint="@color/grey_colorHint"
+                android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:layout_width="60dp"
+
+                android:layout_marginLeft="50dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+            <TextView
+                android:id="@+id/tvLine6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/grey_colorHint"
+                android:textStyle="bold"
+                android:text="|" />
+
+            <EditText
+                android:id="@+id/etColorTempMax"
+                android:hint="MAX"
+                android:textColor="@color/white"
+                android:inputType="numberSigned|numberDecimal"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:textColorHint="@color/grey_colorHint"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/colorPower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Power (W)     "
+                android:textColor="#AFA9A9"
+                android:textSize="15dp" />
+
+
+
+            <EditText
+                android:id="@+id/etColorPowerMin"
+                android:hint="MIN"
+                android:textColor="@color/white"
+                android:inputType="numberSigned|numberDecimal"
+                android:textColorHint="@color/grey_colorHint"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:layout_width="60dp"
+                android:layout_marginLeft="50dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+            <TextView
+                android:id="@+id/tvLine7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/grey_colorHint"
+                android:textStyle="bold"
+                android:text="|" />
+
+            <EditText
+                android:id="@+id/etColorPowerMax"
+                android:hint="MAX"
+                android:textColor="@color/white"
+                android:inputType="numberSigned|numberDecimal"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:textColorHint="@color/grey_colorHint"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/colorPowerFactor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Power Factor"
+                android:textColor="#AFA9A9"
+                android:textSize="15dp" />
+
+
+
+            <EditText
+                android:id="@+id/etColorPFMin"
+                android:hint="MIN"
+                android:textColor="@color/white"
+                android:inputType="numberSigned|numberDecimal"
+                android:textColorHint="@color/grey_colorHint"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:layout_width="60dp"
+                android:layout_marginLeft="52dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+            <TextView
+                android:id="@+id/tvLine8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/grey_colorHint"
+                android:textStyle="bold"
+                android:text="|" />
+
+            <EditText
+                android:id="@+id/etColorPFMax"
+                android:hint="MAX"
+                android:textColor="@color/white"
+                android:inputType="numberSigned|numberDecimal"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:textColorHint="@color/grey_colorHint"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/colorTension"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Electrical Tension"
+                android:textColor="#AFA9A9"
+                android:textSize="15dp" />
+
+
+
+            <EditText
+                android:id="@+id/etColorTensionMin"
+                android:hint="MIN"
+                android:textColor="@color/white"
+                android:inputType="numberSigned|numberDecimal"
+                android:textColorHint="@color/grey_colorHint"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:layout_width="60dp"
+                android:layout_marginLeft="20dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+            <TextView
+                android:id="@+id/tvLine9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/grey_colorHint"
+                android:textStyle="bold"
+                android:text="|" />
+
+            <EditText
+                android:id="@+id/etColorTensionMax"
+                android:hint="MAX"
+                android:textColor="@color/white"
+                android:inputType="numberSigned|numberDecimal"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:textColorHint="@color/grey_colorHint"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/colorAmperage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Amperage (A)"
+                android:textColor="#AFA9A9"
+                android:textSize="15dp" />
+
+
+            <EditText
+                android:id="@+id/etColorAmperageMin"
+                android:hint="MIN"
+                android:textColor="@color/white"
+                android:inputType="numberSigned|numberDecimal"
+                android:textColorHint="@color/grey_colorHint"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:layout_width="60dp"
+                android:layout_marginLeft="42dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+            <TextView
+                android:id="@+id/tvLine10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/grey_colorHint"
+                android:textStyle="bold"
+                android:text="|" />
+
+            <EditText
+                android:id="@+id/etColorAmperageMax"
+                android:hint="MAX"
+                android:textColor="@color/white"
+                android:inputType="numberSigned|numberDecimal"
+                android:fontFamily="@font/poppinsmedium"
+                android:textSize="15dp"
+                android:textColorHint="@color/grey_colorHint"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content">
+            </EditText>
+
+
+        </LinearLayout>
+
+
+
         <Button
             android:id="@+id/btnSaveSettings"
             android:layout_width="match_parent"
             android:layout_height="59dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="40dp"
             android:backgroundTint="@color/green_avocado"
             android:gravity="center"
@@ -372,7 +681,21 @@
             android:textSize="20dp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/tvLine11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="@color/grey_colorHint"
+            android:textStyle="bold"
+            android:layout_marginTop="100dp"
+            android:text="|" />
+
     </LinearLayout>
+    </ScrollView>
+
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigationMenuBar"

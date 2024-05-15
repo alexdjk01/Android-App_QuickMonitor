@@ -69,16 +69,21 @@ public class ProfileActivity extends AppCompatActivity {
         if(receivedIntentLogged!=null) {
             receivedUserHome = receivedIntentLogged.getParcelableExtra("keyHome");
             if (receivedUserHome != null) {
+                // auto complete the editexts with the values of the logged user
+                etEmail.setText(receivedUserHome.email.toString());
+                etURL.setText((receivedUserHome.URL.toString()));
+                //set the property of writing the imput to galse in order not to edit it by mistake, the user shoud press the edit icon to edit
+                etEmail.setEnabled(false);
+                etURL.setEnabled(false);
                 Log.e("Profile activity: ", receivedUserHome.toString());
                 // data was loaded correctly
             }
+            else
+            {
+                Log.e("Profile activity: ", "receivedUserHome is null");
+            }
         }
-        // auto complete the editexts with the values of the logged user
-        etEmail.setText(receivedUserHome.email.toString());
-        etURL.setText((receivedUserHome.URL.toString()));
-        //set the property of writing the imput to galse in order not to edit it by mistake, the user shoud press the edit icon to edit
-        etEmail.setEnabled(false);
-        etURL.setEnabled(false);
+
 
         //edit the email
         ivEditEmail.setOnClickListener(new View.OnClickListener() {

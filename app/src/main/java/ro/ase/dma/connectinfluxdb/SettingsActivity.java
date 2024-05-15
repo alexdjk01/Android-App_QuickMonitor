@@ -41,10 +41,23 @@ public class SettingsActivity extends AppCompatActivity {
     EditText etTensionMax;
     EditText etAmperageMax;
 
+    EditText etColorTemperatureMin;
+    EditText etColorPowerMin;
+    EditText etColorPowerFactorMin;
+    EditText etColorTensionMin;
+    EditText etColorAmperageMin;
+    EditText etColorTemperatureMax;
+    EditText etColorPowerMax;
+    EditText etColorPowerFactorMax;
+    EditText etColorTensionMax;
+    EditText etColorAmperageMax;
+
     Button btnSaveSettings;
 
-    SharedPreferences sharedPreferences;
-    private static final String SHARED_PREFERENCES_NAME = "notifications";
+    SharedPreferences sharedPreferencesNotifications;
+    SharedPreferences sharedPreferencesColors;
+    private static final String SHARED_PREFERENCES_NAME_NOTIFICATIONS = "notifications";
+    private static final String SHARED_PREFERENCES_NAME_COLORS = "colors";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +82,23 @@ public class SettingsActivity extends AppCompatActivity {
         etAmperageMin = findViewById(R.id.etNotifyAmperageMin);
         etAmperageMax = findViewById(R.id.etNotifyAmperageMax);
 
+        etColorTemperatureMin = findViewById(R.id.etColorTempMin);
+        etColorTemperatureMax = findViewById(R.id.etColorTempMax);
+        etColorPowerMin = findViewById(R.id.etColorPowerMin);
+        etColorPowerMax = findViewById(R.id.etColorPowerMax);
+        etColorPowerFactorMin = findViewById(R.id.etColorPFMin);
+        etColorPowerFactorMax = findViewById(R.id.etColorPFMax);
+        etColorTensionMin = findViewById(R.id.etColorTensionMin);
+        etColorTensionMax = findViewById(R.id.etColorTensionMax);
+        etColorAmperageMin = findViewById(R.id.etColorAmperageMin);
+        etColorAmperageMax = findViewById(R.id.etColorAmperageMax);
+
         btnSaveSettings = findViewById(R.id.btnSaveSettings);
 
         bottomNavigation = findViewById(R.id.navigationMenuBar);
+
+        sharedPreferencesNotifications = getSharedPreferences(SHARED_PREFERENCES_NAME_NOTIFICATIONS, MODE_PRIVATE);
+        sharedPreferencesColors = getSharedPreferences(SHARED_PREFERENCES_NAME_COLORS, MODE_PRIVATE);
 
         Intent receivedIntentLogged = getIntent();
         if(receivedIntentLogged!=null) {
@@ -87,60 +114,60 @@ public class SettingsActivity extends AppCompatActivity {
         btnSaveSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                SharedPreferences.Editor editorNotifications = sharedPreferencesNotifications.edit();
+                SharedPreferences.Editor editorColors = sharedPreferencesColors.edit();
 
                 if(swTemperature.isChecked()){
-                    editor.putFloat("minTemperature",Float.parseFloat(etTemperatureMin.getText().toString()));
-                    editor.putFloat("maxTemperature",Float.parseFloat(etTemperatureMax.getText().toString()));
-                    editor.putBoolean("onTemperature" , true);
+                    editorNotifications.putFloat("minTemperature",Float.parseFloat(etTemperatureMin.getText().toString()));
+                    editorNotifications.putFloat("maxTemperature",Float.parseFloat(etTemperatureMax.getText().toString()));
+                    editorNotifications.putBoolean("onTemperature" , true);
                 }
                 else
                 {
-                    editor.putBoolean("onTemperature" , false);
+                    editorNotifications.putBoolean("onTemperature" , false);
                 }
                 if(swPower.isChecked())
                 {
-                    editor.putFloat("minPower",Float.parseFloat(etPowerMin.getText().toString()));
-                    editor.putFloat("maxPower",Float.parseFloat(etPowerMax.getText().toString()));
-                    editor.putBoolean("onPower" , true);
+                    editorNotifications.putFloat("minPower",Float.parseFloat(etPowerMin.getText().toString()));
+                    editorNotifications.putFloat("maxPower",Float.parseFloat(etPowerMax.getText().toString()));
+                    editorNotifications.putBoolean("onPower" , true);
                 }
                 else
                 {
-                    editor.putBoolean("onPower" , false);
+                    editorNotifications.putBoolean("onPower" , false);
                 }
                 if(swPowerFactor.isChecked())
                 {
-                    editor.putFloat("minPowerFactor",Float.parseFloat(etPowerFactorMin.getText().toString()));
-                    editor.putFloat("maxPowerFactor",Float.parseFloat(etPowerFactorMax.getText().toString()));
-                    editor.putBoolean("onPowerFactor" , true);
+                    editorNotifications.putFloat("minPowerFactor",Float.parseFloat(etPowerFactorMin.getText().toString()));
+                    editorNotifications.putFloat("maxPowerFactor",Float.parseFloat(etPowerFactorMax.getText().toString()));
+                    editorNotifications.putBoolean("onPowerFactor" , true);
                 }
                 else
                 {
-                    editor.putBoolean("onPowerFactor" , false);
+                    editorNotifications.putBoolean("onPowerFactor" , false);
                 }
                 if(swTension.isChecked())
                 {
-                    editor.putFloat("minTension",Float.parseFloat(etTensionMin.getText().toString()));
-                    editor.putFloat("maxTension",Float.parseFloat(etTensionMax.getText().toString()));
-                    editor.putBoolean("onTension" , true);
+                    editorNotifications.putFloat("minTension",Float.parseFloat(etTensionMin.getText().toString()));
+                    editorNotifications.putFloat("maxTension",Float.parseFloat(etTensionMax.getText().toString()));
+                    editorNotifications.putBoolean("onTension" , true);
                 }
                 else
                 {
-                    editor.putBoolean("onTension" , false);
+                    editorNotifications.putBoolean("onTension" , false);
                 }
                 if(swAmperage.isChecked())
                 {
-                    editor.putFloat("minAmperage",Float.parseFloat(etAmperageMin.getText().toString()));
-                    editor.putFloat("maxAmperage",Float.parseFloat(etAmperageMax.getText().toString()));
-                    editor.putBoolean("onAmperage" , true);
+                    editorNotifications.putFloat("minAmperage",Float.parseFloat(etAmperageMin.getText().toString()));
+                    editorNotifications.putFloat("maxAmperage",Float.parseFloat(etAmperageMax.getText().toString()));
+                    editorNotifications.putBoolean("onAmperage" , true);
                 }
                 else
                 {
-                    editor.putBoolean("onAmperage" , false);
+                    editorNotifications.putBoolean("onAmperage" , false);
                 }
 
-                editor.apply();
+                editorNotifications.apply();
 
                 SharedPreferences sharedPreferences = getSharedPreferences("notifications", MODE_PRIVATE);
                 Map<String, ?> allEntries = sharedPreferences.getAll();
@@ -149,7 +176,28 @@ public class SettingsActivity extends AppCompatActivity {
                     Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
                 }
 
+                editorColors.putFloat("limitMinTemperature" , Float.parseFloat(etColorTemperatureMin.getText().toString()));
+                editorColors.putFloat("limitMaxTemperature" , Float.parseFloat(etColorTemperatureMax.getText().toString()));
+                editorColors.putFloat("limitMinPower" , Float.parseFloat(etColorPowerMin.getText().toString()));
+                editorColors.putFloat("limitMaxPower" , Float.parseFloat(etColorPowerMax.getText().toString()));
+                editorColors.putFloat("limitMinPowerFactor" , Float.parseFloat(etColorPowerFactorMin.getText().toString()));
+                editorColors.putFloat("limitMaxPowerFactor" , Float.parseFloat(etColorPowerFactorMax.getText().toString()));
+                editorColors.putFloat("limitMinTension" , Float.parseFloat(etColorTensionMin.getText().toString()));
+                editorColors.putFloat("limitMaxTension" , Float.parseFloat(etColorTensionMax.getText().toString()));
+                editorColors.putFloat("limitMinAmperage" , Float.parseFloat(etColorAmperageMin.getText().toString()));
+                editorColors.putFloat("limitMaxAmperage" , Float.parseFloat(etColorAmperageMax.getText().toString()));
+
+                editorColors.apply();
+
+                Map<String, ?> allEntries2 = sharedPreferencesColors.getAll();
+
+                for (Map.Entry<String, ?> entry : allEntries2.entrySet()) {
+                    Log.d("map values color", entry.getKey() + ": " + entry.getValue().toString());
+                }
+
                 Intent toHome = new Intent(getApplicationContext(),HomeActivity.class);
+                toHome.putExtra("keyHome",receivedUserHome);
+                toHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(toHome);
             }
         });
@@ -160,6 +208,8 @@ public class SettingsActivity extends AppCompatActivity {
                 if(item.getItemId() == R.id.navHome)
                 {
                     Intent toHomeIntent = new Intent(getApplicationContext(), HomeActivity.class);
+                    toHomeIntent.putExtra("keyHome",receivedUserHome);
+                    toHomeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(toHomeIntent);
                 }
                 else if(item.getItemId() == R.id.navSettings)
@@ -181,22 +231,33 @@ public class SettingsActivity extends AppCompatActivity {
     public void populateEditText(){
         //populates the editexts values with the ones that are stored in shared preferences. if none, put 0.0 for each
         try{
-            sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-            boolean onTemperature = sharedPreferences.getBoolean("onTemperature",false);
-            boolean onPower = sharedPreferences.getBoolean("onPower",false);
-            boolean onPowerFactor = sharedPreferences.getBoolean("onPowerFactor",false);
-            boolean onTension = sharedPreferences.getBoolean("onTension",false);
-            boolean onAmperage = sharedPreferences.getBoolean("onAmperage",false);
-            etTemperatureMin.setText(String.valueOf(sharedPreferences.getFloat("minTemperature",0.0f)));
-            etTemperatureMax.setText(String.valueOf(sharedPreferences.getFloat("maxTemperature",0.0f)));
-            etPowerMin.setText(String.valueOf(sharedPreferences.getFloat("minPower",0.0f)));
-            etPowerMax.setText(String.valueOf(sharedPreferences.getFloat("maxPower",0.0f)));
-            etPowerFactorMin.setText(String.valueOf(sharedPreferences.getFloat("minPowerFactor",0.0f)));
-            etPowerFactorMax.setText(String.valueOf(sharedPreferences.getFloat("maxPowerFactor",0.0f)));
-            etTensionMin.setText(String.valueOf(sharedPreferences.getFloat("minTension",0.0f)));
-            etTensionMax.setText(String.valueOf(sharedPreferences.getFloat("maxTension",0.0f)));
-            etAmperageMin.setText(String.valueOf(sharedPreferences.getFloat("minAmperage",0.0f)));
-            etAmperageMax.setText(String.valueOf(sharedPreferences.getFloat("maxAmperage",0.0f)));
+            sharedPreferencesNotifications = getSharedPreferences(SHARED_PREFERENCES_NAME_NOTIFICATIONS, MODE_PRIVATE);
+            boolean onTemperature = sharedPreferencesNotifications.getBoolean("onTemperature",false);
+            boolean onPower = sharedPreferencesNotifications.getBoolean("onPower",false);
+            boolean onPowerFactor = sharedPreferencesNotifications.getBoolean("onPowerFactor",false);
+            boolean onTension = sharedPreferencesNotifications.getBoolean("onTension",false);
+            boolean onAmperage = sharedPreferencesNotifications.getBoolean("onAmperage",false);
+            etTemperatureMin.setText(String.valueOf(sharedPreferencesNotifications.getFloat("minTemperature",0.0f)));
+            etTemperatureMax.setText(String.valueOf(sharedPreferencesNotifications.getFloat("maxTemperature",0.0f)));
+            etPowerMin.setText(String.valueOf(sharedPreferencesNotifications.getFloat("minPower",0.0f)));
+            etPowerMax.setText(String.valueOf(sharedPreferencesNotifications.getFloat("maxPower",0.0f)));
+            etPowerFactorMin.setText(String.valueOf(sharedPreferencesNotifications.getFloat("minPowerFactor",0.0f)));
+            etPowerFactorMax.setText(String.valueOf(sharedPreferencesNotifications.getFloat("maxPowerFactor",0.0f)));
+            etTensionMin.setText(String.valueOf(sharedPreferencesNotifications.getFloat("minTension",0.0f)));
+            etTensionMax.setText(String.valueOf(sharedPreferencesNotifications.getFloat("maxTension",0.0f)));
+            etAmperageMin.setText(String.valueOf(sharedPreferencesNotifications.getFloat("minAmperage",0.0f)));
+            etAmperageMax.setText(String.valueOf(sharedPreferencesNotifications.getFloat("maxAmperage",0.0f)));
+
+            etColorTemperatureMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinTemperature",0.0f)));
+            etColorTemperatureMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxTemperature",31.0f)));
+            etColorPowerMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinPower",0.0f)));
+            etColorPowerMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxPower",250.0f)));
+            etColorPowerFactorMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinPowerFactor",70.0f)));
+            etColorPowerFactorMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxPowerFactor",100.0f)));
+            etColorTensionMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinTension",200.0f)));
+            etColorTensionMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxTension",240.0f)));
+            etColorAmperageMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinAmperage",0.1f)));
+            etColorAmperageMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxAmperage",1.0f)));
 
             swTemperature.setChecked(onTemperature);
             swPower.setChecked(onPower);
