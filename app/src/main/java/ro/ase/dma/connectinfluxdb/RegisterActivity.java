@@ -55,16 +55,18 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                tvAlertEmail.setText("");
+                tvAlertPassword.setText("");
                 String email = etEmail.getText().toString();
                 String password = etURL.getText().toString();
                 String passwordVerify = etURLVerify.getText().toString();
 
                 if(verifyCredentials(email,password,passwordVerify))
                 {
-                    new Thread(new Runnable() {     // insert user into database on a secundar thred in order not to block the activity thread.
+                    new Thread(new Runnable() {     // insert user into database on a secondary thread in order not to block the activity thread.
                         @Override
                         public void run() {
-                            //insert into the database in a separate thread in order not to blovk the main thread
+                            //insert into the database in a separate thread in order not to block the main thread
                             User newUser = new User(email,password,null);  // set the engineSeries to null// TO-DO
                             userDao.insert(newUser);
                             Log.w("User:",newUser.toString());
@@ -105,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
             tvAlertEmail.setText("Email format: joedoe@email.com");
             return false;
         }
-        else if ( URL.isEmpty() || URLVerify.isEmpty() || !(URL.length()>6))
+        else if ( URL.isEmpty() || URLVerify.isEmpty() || !(URL.length()>6) || !(URL.equals(URLVerify)))
         {
             tvAlertPassword.setText("URL Wrong! Try again!");
             tvAlertEmail.setText("");
