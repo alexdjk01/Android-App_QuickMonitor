@@ -9,8 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -56,8 +59,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferencesNotifications;
     SharedPreferences sharedPreferencesColors;
-    private static final String SHARED_PREFERENCES_NAME_NOTIFICATIONS = "notifications";
+    String SHARED_PREFERENCES_NAME_NOTIFICATIONS;
     private static final String SHARED_PREFERENCES_NAME_COLORS = "colors";
+
+    Spinner spEngineNumber;
+    String engineInFocus = "Engine3";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +103,25 @@ public class SettingsActivity extends AppCompatActivity {
 
         bottomNavigation = findViewById(R.id.navigationMenuBar);
 
-        sharedPreferencesNotifications = getSharedPreferences(SHARED_PREFERENCES_NAME_NOTIFICATIONS, MODE_PRIVATE);
-        sharedPreferencesColors = getSharedPreferences(SHARED_PREFERENCES_NAME_COLORS, MODE_PRIVATE);
+        spEngineNumber = findViewById(R.id.spinnerEngineNumber);
+        //we need ArrayAdapted to populate a Spinner with the values in the string array situated in res/strings
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.engine_number, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spEngineNumber.setAdapter(adapter);
+
+        // get the engine for which we change the emails alerts
+        spEngineNumber.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                 engineInFocus = adapterView.getItemAtPosition(pos).toString();
+                 populateEditText();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //nothing
+            }
+        });
 
         Intent receivedIntentLogged = getIntent();
         if(receivedIntentLogged!=null) {
@@ -114,9 +137,14 @@ public class SettingsActivity extends AppCompatActivity {
         btnSaveSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(engineInFocus.equals("Engine1"))
+                        SHARED_PREFERENCES_NAME_NOTIFICATIONS = "notifications" + "Engine1";
+                else if(engineInFocus.equals("Engine2"))
+                        SHARED_PREFERENCES_NAME_NOTIFICATIONS = "notifications" + "Engine2";
+                else if(engineInFocus.equals("Engine3"))
+                        SHARED_PREFERENCES_NAME_NOTIFICATIONS = "notifications" + "Engine3";
+                sharedPreferencesNotifications = getSharedPreferences(SHARED_PREFERENCES_NAME_NOTIFICATIONS, MODE_PRIVATE);
                 SharedPreferences.Editor editorNotifications = sharedPreferencesNotifications.edit();
-                SharedPreferences.Editor editorColors = sharedPreferencesColors.edit();
-
                 if(swTemperature.isChecked()){
                     editorNotifications.putFloat("minTemperature",Float.parseFloat(etTemperatureMin.getText().toString()));
                     editorNotifications.putFloat("maxTemperature",Float.parseFloat(etTemperatureMax.getText().toString()));
@@ -166,16 +194,14 @@ public class SettingsActivity extends AppCompatActivity {
                 {
                     editorNotifications.putBoolean("onAmperage" , false);
                 }
-
                 editorNotifications.apply();
-
-                SharedPreferences sharedPreferences = getSharedPreferences("notifications", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_NAME_NOTIFICATIONS, MODE_PRIVATE);
                 Map<String, ?> allEntries = sharedPreferences.getAll();
-
                 for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
                     Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
                 }
-
+                sharedPreferencesColors = getSharedPreferences(SHARED_PREFERENCES_NAME_COLORS, MODE_PRIVATE);
+                SharedPreferences.Editor editorColors = sharedPreferencesColors.edit();
                 editorColors.putFloat("limitMinTemperature" , Float.parseFloat(etColorTemperatureMin.getText().toString()));
                 editorColors.putFloat("limitMaxTemperature" , Float.parseFloat(etColorTemperatureMax.getText().toString()));
                 editorColors.putFloat("limitMinPower" , Float.parseFloat(etColorPowerMin.getText().toString()));
@@ -231,6 +257,14 @@ public class SettingsActivity extends AppCompatActivity {
     public void populateEditText(){
         //populates the editexts values with the ones that are stored in shared preferences. if none, put 0.0 for each
         try{
+            Log.e("ENGINEINFOCUSSSSSSSSS", engineInFocus);
+            if(engineInFocus.equals("Engine1"))
+                SHARED_PREFERENCES_NAME_NOTIFICATIONS = "notifications" + "Engine1";
+            else if(engineInFocus.equals("Engine2"))
+                SHARED_PREFERENCES_NAME_NOTIFICATIONS = "notifications" + "Engine2";
+            else if(engineInFocus.equals("Engine3"))
+                SHARED_PREFERENCES_NAME_NOTIFICATIONS = "notifications" + "Engine3";
+
             sharedPreferencesNotifications = getSharedPreferences(SHARED_PREFERENCES_NAME_NOTIFICATIONS, MODE_PRIVATE);
             boolean onTemperature = sharedPreferencesNotifications.getBoolean("onTemperature",false);
             boolean onPower = sharedPreferencesNotifications.getBoolean("onPower",false);
@@ -248,6 +282,7 @@ public class SettingsActivity extends AppCompatActivity {
             etAmperageMin.setText(String.valueOf(sharedPreferencesNotifications.getFloat("minAmperage",0.0f)));
             etAmperageMax.setText(String.valueOf(sharedPreferencesNotifications.getFloat("maxAmperage",0.0f)));
 
+            sharedPreferencesColors = getSharedPreferences(SHARED_PREFERENCES_NAME_COLORS, MODE_PRIVATE);
             etColorTemperatureMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinTemperature",0.0f)));
             etColorTemperatureMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxTemperature",31.0f)));
             etColorPowerMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinPower",0.0f)));

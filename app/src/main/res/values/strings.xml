@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ConnectInfluxDB</string>
+    <string name="app_name">Quick Monitor</string>
 
     <string-array name="time_intervals">
         <item>1m</item>
@@ -11,4 +11,11 @@
         <item>5h</item>
         <item>24h</item>
     </string-array>
+
+    <string-array name="engine_number">
+        <item>Engine3</item>
+        <item>Engine2</item>
+        <item>Engine1</item>
+    </string-array>
+
 </resources>

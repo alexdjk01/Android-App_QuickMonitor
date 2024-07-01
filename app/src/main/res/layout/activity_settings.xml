@@ -20,7 +20,18 @@
         android:fontFamily="@font/playfairdisplaybold"
         android:textStyle="bold" />
 
+
+    <Spinner
+        android:id="@+id/spinnerEngineNumber"
+        android:layout_width="150dp"
+        android:layout_marginTop="110dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/time_interval_spinner"
+        android:layout_height="wrap_content" />
+
     <ScrollView
+        android:id="@+id/svSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Settings"

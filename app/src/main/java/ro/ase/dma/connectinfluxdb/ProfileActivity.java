@@ -136,23 +136,18 @@ public class ProfileActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Log.e("User IN Save:", receivedUserHome.toString());
-
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         userDao.update(receivedUserHome);
                     }
                 }).start();
-
                 sharedPreferences = getSharedPreferences("loginData",MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
                 editor.putString("email", String.valueOf(etEmail.getText()));
                 editor.putString("URL", String.valueOf(etURL.getText()));
                 editor.commit();
-
                 Intent toHome = new Intent(getApplicationContext(),HomeActivity.class);
                 startActivity(toHome);
             }
@@ -215,7 +210,6 @@ public class ProfileActivity extends AppCompatActivity {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
         alertBuilder.setTitle("Delete account");
         alertBuilder.setMessage("Are you sure?");
-
         alertBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -226,11 +220,8 @@ public class ProfileActivity extends AppCompatActivity {
                         userDao.delete(receivedUserHome);
                     }
                 }).start();
-
-                //opens the starting activity
                 Intent toStartApp = new Intent(getApplicationContext(), StartAppActivity.class);
                 startActivity(toStartApp);
-
             }
         });
 
