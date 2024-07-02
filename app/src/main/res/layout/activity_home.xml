@@ -228,7 +228,7 @@
             <Spinner
                 android:id="@+id/spinnerTimeTemperature"
                 android:layout_width="60dp"
-                android:layout_height="20dp"
+                android:layout_height="25dp"
                 android:layout_marginTop="-340dp"
                 android:layout_marginLeft="275dp"
                 android:background="@drawable/time_interval_spinner"
@@ -264,7 +264,7 @@
             <Spinner
                 android:id="@+id/spinnerTimePower"
                 android:layout_width="60dp"
-                android:layout_height="20dp"
+                android:layout_height="25dp"
                 android:layout_marginTop="-340dp"
                 android:layout_marginLeft="275dp"
                 android:background="@drawable/time_interval_spinner"
@@ -301,7 +301,7 @@
             <Spinner
                 android:id="@+id/spinnerTimeTension"
                 android:layout_width="60dp"
-                android:layout_height="20dp"
+                android:layout_height="25dp"
                 android:layout_marginTop="-340dp"
                 android:layout_marginLeft="275dp"
                 android:background="@drawable/time_interval_spinner"
@@ -338,7 +338,7 @@
             <Spinner
                 android:id="@+id/spinnerTimeAmperage"
                 android:layout_width="60dp"
-                android:layout_height="20dp"
+                android:layout_height="25dp"
                 android:layout_marginTop="-340dp"
                 android:layout_marginLeft="275dp"
                 android:background="@drawable/time_interval_spinner"

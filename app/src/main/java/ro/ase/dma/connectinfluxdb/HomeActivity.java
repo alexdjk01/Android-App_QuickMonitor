@@ -175,6 +175,9 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
         bottomNavigation = findViewById(R.id.navigationMenuBar);
 
+        //sets the default engine(Engine3 is the startup engine) to orange from the beginning in order to see which engine is in focus
+        btnEngine3.setTextColor(getApplicationContext().getColor(R.color.orange_alert));
+
         Intent receivedIntentLogged = getIntent();
         if(receivedIntentLogged!=null) {
             receivedUserLogged = receivedIntentLogged.getParcelableExtra("keyLogin");

@@ -97,11 +97,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private Boolean verifyCredentials(String email, String URL, String URLVerify){
-
-        String passwordRegex = "^(?=.*[A-Z])(?=.*[0-9]).+$"; // ^/$ start and end of regex string
-        //  (?=.*[A-Z]) checks if an uppercase letter is present in the password input
-        //  (?=.*[0-9]) checks if a number is present in the password input
-        //so if the email does not match email format or the password does not contain uppercase and number or the length is smaller than 7 it will return false
         if( email.isEmpty() || !(Patterns.EMAIL_ADDRESS.matcher(email).matches()))
         {
             tvAlertEmail.setText("Email format: joedoe@email.com");

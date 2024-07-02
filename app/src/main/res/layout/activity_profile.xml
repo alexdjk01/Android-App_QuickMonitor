@@ -55,7 +55,7 @@
         android:layout_gravity="center"
         android:src="@drawable/edit"
         android:layout_marginTop="240dp"
-        android:layout_marginLeft="320dp"
+        android:layout_marginLeft="350dp"
 
         />
 
@@ -92,7 +92,7 @@
         android:layout_gravity="center"
         android:src="@drawable/edit"
         android:layout_marginTop="330dp"
-        android:layout_marginLeft="320dp"
+        android:layout_marginLeft="350dp"
 
         />
 

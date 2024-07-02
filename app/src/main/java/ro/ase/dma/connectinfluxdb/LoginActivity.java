@@ -79,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tvAlertEmail.setText("");
+                tvAlertURL.setText("");
                 String email = etEmail.getText().toString();
                 String URL = etURL.getText().toString();
                 if(verifyCredentials(email,URL))   // if the email and URL are written properly
