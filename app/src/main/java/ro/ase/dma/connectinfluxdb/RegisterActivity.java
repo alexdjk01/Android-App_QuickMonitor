@@ -99,12 +99,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private Boolean verifyCredentials(String email, String URL, String URLVerify){
+        String IPregex = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(:\\d{1,5})?$";
         if( email.isEmpty() || !(Patterns.EMAIL_ADDRESS.matcher(email).matches()))
         {
             tvAlertEmail.setText("Email format: joedoe@email.com");
             return false;
         }
-        else if ( URL.isEmpty() || URLVerify.isEmpty() || !(URL.length()>6) || !(URL.equals(URLVerify)))
+        else if ( URL.isEmpty() || URLVerify.isEmpty() || !(URL.length()>6) || !(URL.equals(URLVerify)) || !URL.matches(IPregex))
         {
             tvAlertPassword.setText("URL Wrong! Try again!");
             tvAlertEmail.setText("");

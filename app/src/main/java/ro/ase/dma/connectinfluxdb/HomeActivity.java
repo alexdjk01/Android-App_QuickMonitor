@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.androidplot.xy.BoundaryMode;
@@ -504,7 +505,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                     alertDialog();
                 }
             }
-        }, 1000); // 1 sec delay
+        }, 2500); // 2.5 sec delay
     }
 
 
@@ -753,12 +754,18 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 // now the engines are grouped in the groupedEngine arrayList that will contain 3 engines
                 // we need to work with the data inside this ArrayList.
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateUI(groupedEngines);
-                    }
-                });
+                if(!groupedEngines.isEmpty())
+                {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateUI(groupedEngines);
+                        }
+                    });
+                }else
+                {
+                    Toast.makeText(getApplicationContext(), "Not receiving measurements!", Toast.LENGTH_SHORT).show();
+                }
             }
 
     }

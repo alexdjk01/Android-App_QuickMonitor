@@ -177,6 +177,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent toStartApp = new Intent(getApplicationContext(), StartAppActivity.class);
+                toStartApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(toStartApp);
             }
         });
@@ -240,6 +241,7 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }).start();
                 Intent toStartApp = new Intent(getApplicationContext(), StartAppActivity.class);
+                toStartApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(toStartApp);
             }
         });
