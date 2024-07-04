@@ -38,11 +38,11 @@
     <TextView
         android:id="@+id/tvInformations"
         android:layout_width="332dp"
-        android:layout_height="72dp"
+        android:layout_height="85dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
         android:gravity="center_horizontal|top"
-        android:text="Effortlessly monitor temperature, current, and tension levels of your electrical motors in real-time with our intuitive app."
+        android:text="Effortlessly monitor temperature, current and tension levels of your electrical motors in real-time with our intuitive app."
 
         android:textColor="@color/white" />
 
