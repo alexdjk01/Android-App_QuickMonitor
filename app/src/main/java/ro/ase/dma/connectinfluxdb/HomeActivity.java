@@ -1,6 +1,7 @@
 package ro.ase.dma.connectinfluxdb;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -11,13 +12,17 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -175,9 +180,10 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
 
         bottomNavigation = findViewById(R.id.navigationMenuBar);
 
+
+
         //sets the default engine(Engine3 is the startup engine) to orange from the beginning in order to see which engine is in focus
         btnEngine3.setTextColor(getApplicationContext().getColor(R.color.orange_alert));
-
         Intent receivedIntentLogged = getIntent();
         if(receivedIntentLogged!=null) {
             receivedUserLogged = receivedIntentLogged.getParcelableExtra("keyLogin");
@@ -186,7 +192,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 // data was loaded correctly
             }
         }
-
+        executeAfterDelay();
         btnEngine1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -290,7 +296,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                }
                else
                {
-                   Log.w("resultHistoryEmpty", resultHistory.toString());
+                   //Log.w("resultHistoryEmpty", resultHistory.toString());
                }
            }
 
@@ -341,7 +347,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 }
                 else
                 {
-                    Log.w("resultHistoryEmpty", resultHistory.toString());
+                    //Log.w("resultHistoryEmpty", resultHistory.toString());
                 }
             }
 
@@ -386,7 +392,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 }
                 else
                 {
-                    Log.w("resultHistoryEmpty", resultHistory.toString());
+                    //Log.w("resultHistoryEmpty", resultHistory.toString());
                 }
             }
             @Override
@@ -430,7 +436,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
                 }
                 else
                 {
-                    Log.w("resultHistoryEmpty", resultHistory.toString());
+                    //Log.w("resultHistoryEmpty", resultHistory.toString());
                 }
             }
 
@@ -487,6 +493,19 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     }
 
 
+    private void executeAfterDelay() {
+        // Create a handler associated with the main (UI) thread
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(tvNumericalTemperature.getText().toString().equals("NO DATA"))
+                {
+                    alertDialog();
+                }
+            }
+        }, 1000); // 1 sec delay
+    }
 
 
     // method that is in charge with the design of the graph.
@@ -538,11 +557,6 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         ArrayList<String> arrayTime = new ArrayList<>();
         ArrayList<String> arrayValue= new ArrayList<>();
         ArrayList<String> engineValues = resultHistory.get(index);
-        Log.w("ResultH Current index", String.valueOf(index));
-        for (String data:engineValues)
-        {
-            Log.w("ResultH Current Value", data);
-        }
         for(String data:engineValues)
         {
             String divideData[] = data.split(",\\s*") ;// in ordet to split by , and space
@@ -551,12 +565,12 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             arrayValue.add(divideData[2]);
         }
 
-        Log.w("Value", String.valueOf(arrayValue));
+        //Log.w("Value", String.valueOf(arrayValue));
 
         // time values in arrayTime are in UTC format. However Romania is situated in UTC+3
         // using this method to covert the UTC time in UTC+3
         ArrayList<String> convertedTimesArray = TimeConversionUTC.parseToUtcPlus3(arrayTime);
-        Log.w("Time", String.valueOf(convertedTimesArray));
+        //Log.w("Time", String.valueOf(convertedTimesArray));
 
         ArrayList<Double> doubleValues = new ArrayList<>();
         for (String strValue : arrayValue) {
@@ -570,7 +584,7 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         }
 
         Double[] doubleArray = doubleValues.toArray(new Double[doubleValues.size()]);
-        Log.w("DoubleArray", Arrays.toString(doubleArray));
+        //Log.w("DoubleArray", Arrays.toString(doubleArray));
 
         runOnUiThread(new Runnable() {
             @Override
@@ -668,21 +682,21 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
             }
         }
 
-        Log.w("Graph History T0", String.valueOf(T0));
-        Log.w("Graph History T1", String.valueOf(T1));
-        Log.w("Graph History T2", String.valueOf(T2));
-        Log.w("Graph History P0", String.valueOf(P_testem3_0));
-        Log.w("Graph History P1", String.valueOf(P_testem3_1));
-        Log.w("Graph History P2", String.valueOf(P_testem3_2));
-        Log.w("Graph History PF0", String.valueOf(PF_0));
-        Log.w("Graph History PF1", String.valueOf(PF_1));
-        Log.w("Graph History PF2", String.valueOf(PF_2));
-        Log.w("Graph History T0", String.valueOf(V_0));
-        Log.w("Graph History T1", String.valueOf(V_1));
-        Log.w("Graph History T2", String.valueOf(V_2));
-        Log.w("Graph History A0", String.valueOf(I_0));
-        Log.w("Graph History A1", String.valueOf(I_1));
-        Log.w("Graph History A2", String.valueOf(I_2));
+//        Log.w("Graph History T0", String.valueOf(T0));
+//        Log.w("Graph History T1", String.valueOf(T1));
+//        Log.w("Graph History T2", String.valueOf(T2));
+//        Log.w("Graph History P0", String.valueOf(P_testem3_0));
+//        Log.w("Graph History P1", String.valueOf(P_testem3_1));
+//        Log.w("Graph History P2", String.valueOf(P_testem3_2));
+//        Log.w("Graph History PF0", String.valueOf(PF_0));
+//        Log.w("Graph History PF1", String.valueOf(PF_1));
+//        Log.w("Graph History PF2", String.valueOf(PF_2));
+//        Log.w("Graph History T0", String.valueOf(V_0));
+//        Log.w("Graph History T1", String.valueOf(V_1));
+//        Log.w("Graph History T2", String.valueOf(V_2));
+//        Log.w("Graph History A0", String.valueOf(I_0));
+//        Log.w("Graph History A1", String.valueOf(I_1));
+//        Log.w("Graph History A2", String.valueOf(I_2));
 
         resultHistory.add(T0);
         resultHistory.add(T1);
@@ -707,71 +721,101 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
     @Override
     public void onDataChanged(ArrayList<String> dataArray) {
 
-        // The current data for 3 engines with 5 variables each is in total 15 variables
-        // If the Array List that is received exceed 15 variables it means that the history is transmitted!
-        // We have an if clause to check that
-        if(dataArray.size() > 15)
-        {
-            Log.w("History", "History loaded!");
-            splitValuesHistory(dataArray);
-        }
-        else
-        {
-            Log.w("Current", "Live data loaded!");
-            // dataArray has 15 variables, 5 for each engine.
-            Log.w("Current", String.valueOf(dataArray));
-            //arrayList to group all 3 engines that will be stored also in ArrayLists
+            // The current data for 3 engines with 5 variables each is in total 15 variables
+            // If the Array List that is received exceed 15 variables it means that the history is transmitted!
+            // We have an if clause to check that
+            if (dataArray.size() > 15) {
+                //Log.w("History", "History loaded!");
+                splitValuesHistory(dataArray);
+            } else {
+                //Log.w("Current", "Live data loaded!");
+                // dataArray has 15 variables, 5 for each engine.
+                //Log.w("Current", String.valueOf(dataArray));
+                //arrayList to group all 3 engines that will be stored also in ArrayLists
 
-            // Clear the current groupedEngines list to refill with updated data
-            groupedEngines.clear();
+                // Clear the current groupedEngines list to refill with updated data
+                groupedEngines.clear();
 
 
-            // arrayList holder for one engine
-            ArrayList<String> holderEngine = new ArrayList<>();
+                // arrayList holder for one engine
+                ArrayList<String> holderEngine = new ArrayList<>();
 
-            for ( int i=0; i<dataArray.size(); i++)
-            {
-                holderEngine.add(dataArray.get(i));
+                for (int i = 0; i < dataArray.size(); i++) {
+                    holderEngine.add(dataArray.get(i));
 
-                //when this holder reaches 5 values, that means a complete engine variables had been loaded
-                if(holderEngine.size() ==5)
-                {
-                    // use new arrayList in order to create a new instance of the array list because when i will delete info from honder engine it will also delete everywhere it is the same reference
-                    groupedEngines.add(new ArrayList<>(holderEngine));
-                    holderEngine.clear();
+                    //when this holder reaches 5 values, that means a complete engine variables had been loaded
+                    if (holderEngine.size() == 5) {
+                        // use new arrayList in order to create a new instance of the array list because when i will delete info from honder engine it will also delete everywhere it is the same reference
+                        groupedEngines.add(new ArrayList<>(holderEngine));
+                        holderEngine.clear();
+                    }
                 }
+                // now the engines are grouped in the groupedEngine arrayList that will contain 3 engines
+                // we need to work with the data inside this ArrayList.
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateUI(groupedEngines);
+                    }
+                });
             }
-            // now the engines are grouped in the groupedEngine arrayList that will contain 3 engines
-            // we need to work with the data inside this ArrayList.
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    updateUI(groupedEngines);
-                }
-            });
+    }
 
-        }
+    public void alertDialog()
+    {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        alertBuilder.setTitle("URL provided is wrong!");
+        alertBuilder.setMessage("Input the URL again!");
+        alertBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
 
+        alertBuilder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+               finishAffinity(); // closes the applications
+            }
+        });
+
+        AlertDialog alertDialog = alertBuilder.create();
+
+        //style the buttons
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.green_avocado));
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.red_cancel));
+            }
+        });
+        alertDialog.show();
     }
 
     // method to save the current data that enters the application into resultHistory even though the engine is not in focus on the UI
     public void loadDataSeparatelyAndSaveItInResultHistoryEvenWhenNotInFocus(){
-        resultHistory.get(0).add(String.format("T%d, %s, %f",0,engineOne.getTemperatureTime(),engineOne.getTemperatureValue()));
-        resultHistory.get(1).add(String.format("T%d, %s, %f",1,engineTwo.getTemperatureTime(),engineTwo.getTemperatureValue()));
-        resultHistory.get(2).add(String.format("T%d, %s, %f",2,engineThree.getTemperatureTime(),engineThree.getTemperatureValue()));
-        resultHistory.get(3).add(String.format("P_testem3_%d, %s, %f",0,engineOne.getPowerTime(),engineOne.getPowerValue()));
-        resultHistory.get(4).add(String.format("P_testem3_%d, %s, %f",1,engineTwo.getPowerTime(),engineTwo.getPowerValue()));
-        resultHistory.get(5).add(String.format("P_testem3_%d, %s, %f",2,engineThree.getPowerTime(),engineThree.getPowerValue()));
-        resultHistory.get(6).add(String.format("PF_%d, %s, %f",0,engineOne.getPowerFactorTime(),engineOne.getPowerFactorValue()));
-        resultHistory.get(7).add(String.format("PF_%d, %s, %f",1,engineTwo.getPowerFactorTime(),engineTwo.getPowerFactorValue()));
-        resultHistory.get(8).add(String.format("PF_%d, %s, %f",2,engineThree.getPowerFactorTime(),engineThree.getPowerFactorValue()));
-        resultHistory.get(9).add(String.format("V_%d, %s, %f",0,engineOne.getTensionTime(),engineOne.getTensionValue()));
-        resultHistory.get(10).add(String.format("V_%d, %s, %f",1,engineTwo.getTensionTime(),engineTwo.getTensionValue()));
-        resultHistory.get(11).add(String.format("V_%d, %s, %f",2,engineThree.getTensionTime(),engineThree.getTensionValue()));
-        resultHistory.get(12).add(String.format("I_%d, %s, %f",0,engineOne.getAmperageTime(),engineOne.getAmperageValue()));
-        resultHistory.get(13).add(String.format("I_%d, %s, %f",1,engineTwo.getAmperageTime(),engineTwo.getAmperageValue()));
-        resultHistory.get(14).add(String.format("I_%d, %s, %f",2,engineThree.getAmperageTime(),engineThree.getAmperageValue()));
+        if(!resultHistory.isEmpty())
+        {
+            resultHistory.get(0).add(String.format("T%d, %s, %f",0,engineOne.getTemperatureTime(),engineOne.getTemperatureValue()));
+            resultHistory.get(1).add(String.format("T%d, %s, %f",1,engineTwo.getTemperatureTime(),engineTwo.getTemperatureValue()));
+            resultHistory.get(2).add(String.format("T%d, %s, %f",2,engineThree.getTemperatureTime(),engineThree.getTemperatureValue()));
+            resultHistory.get(3).add(String.format("P_testem3_%d, %s, %f",0,engineOne.getPowerTime(),engineOne.getPowerValue()));
+            resultHistory.get(4).add(String.format("P_testem3_%d, %s, %f",1,engineTwo.getPowerTime(),engineTwo.getPowerValue()));
+            resultHistory.get(5).add(String.format("P_testem3_%d, %s, %f",2,engineThree.getPowerTime(),engineThree.getPowerValue()));
+            resultHistory.get(6).add(String.format("PF_%d, %s, %f",0,engineOne.getPowerFactorTime(),engineOne.getPowerFactorValue()));
+            resultHistory.get(7).add(String.format("PF_%d, %s, %f",1,engineTwo.getPowerFactorTime(),engineTwo.getPowerFactorValue()));
+            resultHistory.get(8).add(String.format("PF_%d, %s, %f",2,engineThree.getPowerFactorTime(),engineThree.getPowerFactorValue()));
+            resultHistory.get(9).add(String.format("V_%d, %s, %f",0,engineOne.getTensionTime(),engineOne.getTensionValue()));
+            resultHistory.get(10).add(String.format("V_%d, %s, %f",1,engineTwo.getTensionTime(),engineTwo.getTensionValue()));
+            resultHistory.get(11).add(String.format("V_%d, %s, %f",2,engineThree.getTensionTime(),engineThree.getTensionValue()));
+            resultHistory.get(12).add(String.format("I_%d, %s, %f",0,engineOne.getAmperageTime(),engineOne.getAmperageValue()));
+            resultHistory.get(13).add(String.format("I_%d, %s, %f",1,engineTwo.getAmperageTime(),engineTwo.getAmperageValue()));
+            resultHistory.get(14).add(String.format("I_%d, %s, %f",2,engineThree.getAmperageTime(),engineThree.getAmperageValue()));
+        }
+
     }
 
     //method for exporting all the history up to current values in the database
@@ -1121,9 +1165,9 @@ public class HomeActivity extends AppCompatActivity implements DataUpdateCallbac
         Double maxTemperature = (double) sharedPreferences.getFloat("limitMaxTemperature",31.0f);
         Double minPower = (double) sharedPreferences.getFloat("limitMinPower",0.0f);
         Double maxPower = (double) sharedPreferences.getFloat("limitMaxPower",250.0f);
-        Double minPowerFactor = (double) sharedPreferences.getFloat("limitMinPowerFactor",70.0f);
-        Double maxPowerFactor = (double) sharedPreferences.getFloat("limitMaxPowerFactor",100.0f);
-        Double minTension = (double) sharedPreferences.getFloat("limitMinTension",200.0f);
+        Double minPowerFactor = (double) sharedPreferences.getFloat("limitMinPowerFactor",0.1f);
+        Double maxPowerFactor = (double) sharedPreferences.getFloat("limitMaxPowerFactor",1.0f);
+        Double minTension = (double) sharedPreferences.getFloat("limitMinTension",180.0f);
         Double maxTension = (double) sharedPreferences.getFloat("limitMaxTension",240.0f);
         Double minAmperage = (double) sharedPreferences.getFloat("limitMinAmperage",0.1f);
         Double maxAmperage = (double) sharedPreferences.getFloat("limitMaxAmperage",1.0f);

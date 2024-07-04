@@ -284,11 +284,11 @@ public class SettingsActivity extends AppCompatActivity {
 
             sharedPreferencesColors = getSharedPreferences(SHARED_PREFERENCES_NAME_COLORS, MODE_PRIVATE);
             etColorTemperatureMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinTemperature",0.0f)));
-            etColorTemperatureMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxTemperature",31.0f)));
+            etColorTemperatureMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxTemperature",50.0f)));
             etColorPowerMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinPower",0.0f)));
             etColorPowerMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxPower",250.0f)));
-            etColorPowerFactorMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinPowerFactor",70.0f)));
-            etColorPowerFactorMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxPowerFactor",100.0f)));
+            etColorPowerFactorMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinPowerFactor",0.1f)));
+            etColorPowerFactorMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxPowerFactor",1.0f)));
             etColorTensionMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinTension",200.0f)));
             etColorTensionMax.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMaxTension",240.0f)));
             etColorAmperageMin.setText(String.valueOf(sharedPreferencesColors.getFloat("limitMinAmperage",0.1f)));

@@ -61,36 +61,38 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = etURL.getText().toString();
                 String passwordVerify = etURLVerify.getText().toString();
 
-                if(verifyCredentials(email,password,passwordVerify))
+                if(userDao.getUserByEmail(email) != null)   // if the user exists in the database
                 {
-                    new Thread(new Runnable() {     // insert user into database on a secondary thread in order not to block the activity thread.
-                        @Override
-                        public void run() {
-                            //insert into the database in a separate thread in order not to block the main thread
-                            User newUser = new User(email,password,null);  // set the engineSeries to null// TO-DO
-                            userDao.insert(newUser);
-                            Log.w("User:",newUser.toString());
-                            //saved user to database then proceed to the login page in order for user to log in into the application
-                            // start login activity with user in the intent on the main thread in order to transmit the logged user.
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
-                                    intent.putExtra("keyRegister", newUser);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                    //FLAG_ACTIVITY_CLEAR_TOP brings the LoginActivity to the top of the stack, closing the ones above it
-                                    //FLAG_ACTIVITY_SINGLE_TOP if the activity is alive, Android won't create another activity.
-                                    startActivity(intent);
-                                }
-                            });
-                        }
-                    }).start();
+                    Toast.makeText(getApplicationContext(), "Email unavailable! Pick another one!", Toast.LENGTH_SHORT).show();
                 }
-                else
-                {
-                    // display a error message
-                    Toast.makeText(getApplicationContext(), "Fill the fields properly!", Toast.LENGTH_SHORT).show();
-
+                else{
+                    if (verifyCredentials(email, password, passwordVerify)) {
+                        new Thread(new Runnable() {     // insert user into database on a secondary thread in order not to block the activity thread.
+                            @Override
+                            public void run() {
+                                //insert into the database in a separate thread in order not to block the main thread
+                                User newUser = new User(email, password, null);  // set the engineSeries to null// TO-DO
+                                userDao.insert(newUser);
+                                Log.w("User:", newUser.toString());
+                                //saved user to database then proceed to the login page in order for user to log in into the application
+                                // start login activity with user in the intent on the main thread in order to transmit the logged user.
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                        intent.putExtra("keyRegister", newUser);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                        //FLAG_ACTIVITY_CLEAR_TOP brings the LoginActivity to the top of the stack, closing the ones above it
+                                        //FLAG_ACTIVITY_SINGLE_TOP if the activity is alive, Android won't create another activity.
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
+                        }).start();
+                    } else {
+                        // display a error message
+                        Toast.makeText(getApplicationContext(), "Fill the fields properly!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

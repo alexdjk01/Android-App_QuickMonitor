@@ -97,6 +97,7 @@ public class SemiCircularProgressBar extends View {
     public void setColor(int color)
     {
         progressPaint.setColor(color);
+        textPaint.setColor(color);
     }
     public void setMinMax(double min, double max)
     {

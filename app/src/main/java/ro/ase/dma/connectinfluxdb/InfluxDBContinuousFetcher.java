@@ -89,6 +89,7 @@ public class InfluxDBContinuousFetcher {
             if (dataUpdateCallback != null) {
                 dataUpdateCallback.onDataChanged(dataList);
             }
+
         }, 0, 10, TimeUnit.SECONDS); // Fetch data every 10 second
     }
 
@@ -98,6 +99,8 @@ public class InfluxDBContinuousFetcher {
         String[]  measurements={"T0", "P_testem3_0", "PF_0", "V_0", "I_0", "T1", "P_testem3_1", "PF_1", "V_1", "I_1", "T2", "P_testem3_2", "PF_2", "V_2", "I_2"};
         String databaseName="monitor";
         executor.execute(() -> {
+            sharedPreferences = context.getSharedPreferences("loginData", Context.MODE_PRIVATE);
+            String URL = sharedPreferences.getString("URL","192.168.100.10:8086");
             //save the data taken in the last fixed interval loop into an arraylist
             ArrayList<String> dataList = new ArrayList<>();
             //start for
@@ -106,7 +109,7 @@ public class InfluxDBContinuousFetcher {
                 // take all the values in the past hour
                 String query = String.format("SELECT value FROM \"%s\"  WHERE time > now() - 24h", measurement);
                 try {
-                    URL url = new URL("http://192.168.100.10:8086/query?q=" + query + "&db=" + databaseName);
+                    URL url = new URL("http://"+URL+"/query?q=" + query + "&db=" + databaseName);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
                     // Read the response

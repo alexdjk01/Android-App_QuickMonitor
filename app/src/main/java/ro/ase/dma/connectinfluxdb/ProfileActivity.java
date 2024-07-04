@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Button btnLogout;
 
     private TextView tvDelete;
+    private TextView tvAlertEmail;
+    private TextView tvAlertURL;
     private UserRoomDataBase userDatabase;
     private UserDao userDao;
 
@@ -52,6 +55,8 @@ public class ProfileActivity extends AppCompatActivity {
         etURL = findViewById(R.id.etURL);
         ivEditEmail = findViewById(R.id.ivEditEmail);
         ivEditURL = findViewById(R.id.ivEditURL);
+        tvAlertEmail = findViewById(R.id.tvAlertEmail);
+        tvAlertURL = findViewById(R.id.tvAlertURL);
 
         userDatabase = UserRoomDataBase.getInstance(this);
         userDao = userDatabase.getUserDao();
@@ -136,20 +141,34 @@ public class ProfileActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        userDao.update(receivedUserHome);
+                tvAlertURL.setText("");
+                tvAlertEmail.setText("");
+                sharedPreferences = getSharedPreferences("loginData", MODE_PRIVATE);
+                String currentEmailLogged = sharedPreferences.getString("email","djkmata.djkmata@gmail.com");
+                if(userDao.getUserByEmail(etEmail.getText().toString()) != null && !userDao.getUserByEmail(etEmail.getText().toString()).email.equals(currentEmailLogged) )   // if the user exists in the database
+                {
+                    Toast.makeText(getApplicationContext(), "Email unavailable! Pick another one!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (verifyCredentials(etEmail.getText().toString(), etURL.getText().toString())) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                userDao.update(receivedUserHome);
+                            }
+                        }).start();
+                        sharedPreferences = getSharedPreferences("loginData", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear();
+                        editor.putString("email", String.valueOf(etEmail.getText()));
+                        editor.putString("URL", String.valueOf(etURL.getText()));
+                        editor.commit();
+                        Intent toHome = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(toHome);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Fill the fields properly!", Toast.LENGTH_SHORT).show();
                     }
-                }).start();
-                sharedPreferences = getSharedPreferences("loginData",MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.putString("email", String.valueOf(etEmail.getText()));
-                editor.putString("URL", String.valueOf(etURL.getText()));
-                editor.commit();
-                Intent toHome = new Intent(getApplicationContext(),HomeActivity.class);
-                startActivity(toHome);
+                }
             }
         });
 
@@ -244,6 +263,25 @@ public class ProfileActivity extends AppCompatActivity {
         });
         alertDialog.show();
     }
+
+    private Boolean verifyCredentials(String email, String url){
+        String IPregex = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(:\\d{1,5})?$";
+        if(   email.isEmpty() || !(Patterns.EMAIL_ADDRESS.matcher(email).matches()) )
+        {
+            tvAlertEmail.setText("Email format: joedoe@email.com");
+            return false;
+        }
+        else if(url.isEmpty() ||  !(url.length()>6) || !url.matches(IPregex))
+        {
+            tvAlertURL.setText("URL Wrong! Try again!");
+            tvAlertEmail.setText("");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
 
 
 }

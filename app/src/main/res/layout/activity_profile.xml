@@ -60,6 +60,16 @@
         />
 
     <TextView
+        android:id="@+id/tvAlertEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="270dp"
+        android:textColor="@color/orange_alert"
+        android:text="" />
+
+    <TextView
         android:id="@+id/tvURLLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,7 +78,7 @@
         android:fontFamily="@font/poppinsmedium"
         android:textColor="@color/white"
         android:textSize="16dp"
-        android:layout_marginTop="290dp"
+        android:layout_marginTop="300dp"
         android:layout_marginLeft="30dp"/>
 
     <EditText
@@ -81,7 +91,7 @@
         android:textColor="@color/white"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="320dp"
+        android:layout_marginTop="330dp"
         android:background="@drawable/edit_text"
         />
 
@@ -91,10 +101,19 @@
         android:layout_height="25dp"
         android:layout_gravity="center"
         android:src="@drawable/edit"
-        android:layout_marginTop="330dp"
+        android:layout_marginTop="340dp"
         android:layout_marginLeft="350dp"
 
         />
+    <TextView
+        android:id="@+id/tvAlertURL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="370dp"
+        android:textColor="@color/orange_alert"
+        android:text="" />
 
     <Button
         android:id="@+id/btnSave"

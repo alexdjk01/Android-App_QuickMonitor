@@ -398,7 +398,7 @@
             android:fontFamily="@font/poppinsmedium"
             android:textColor="@color/grey_colorHint"
             android:textSize="10dp"
-            android:text="ⓘ Minimum color limit will be RED and maximum will be GREEN" />
+            android:text="ⓘ RED means BAD conditions, while GREEN denotes NORMAL conditions" />
 
         <LinearLayout
             android:layout_width="match_parent"
